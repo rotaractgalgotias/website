@@ -30,6 +30,8 @@ export default async function BoardCouncil() {
     .filter((member) => member.memberType !== "COUNCIL")
     .sort(() => Math.random() - 0.5);
 
+  const slicedMembers = shuffledMembers.slice(0, 10);
+
   // Filter only council members
   const councilMembers = sortedMembers.filter(
     (member) => member.memberType === "COUNCIL"
@@ -57,8 +59,11 @@ export default async function BoardCouncil() {
       </div>
       <div className="flex flex-col items-center gap-4">
         <div className="flex -space-x-4">
-          {shuffledMembers.map((_, i) => (
-            <Avatar key={i} className="w-10 h-10 border-2 border-background">
+          {slicedMembers.map((_, i) => (
+            <Avatar
+              key={i}
+              className="w-10 h-10 border-2 border-background z-10"
+            >
               <AvatarImage
                 src={shuffledMembers[i].imageUrl}
                 alt={`Team member ${i + 1}`}
@@ -68,8 +73,8 @@ export default async function BoardCouncil() {
               </AvatarFallback>
             </Avatar>
           ))}
-          <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-background bg-muted text-sm">
-            +{shuffledMembers.length}
+          <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-background bg-muted text-sm z-20">
+            +{shuffledMembers.length - slicedMembers.length}
           </div>
         </div>
         <Link href={"/team"}>
