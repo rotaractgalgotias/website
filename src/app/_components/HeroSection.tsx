@@ -5,8 +5,8 @@ import { ArrowRightIcon, YoutubeIcon } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <section className="w-full grid lg:grid-cols-2 gap-12 py-16 items-center">
-      <div className="space-y-6">
+    <section className="w-full flex flex-col-reverse lg:flex-row gap-6 lg:gap-12 items-center">
+      <div className="w-full space-y-6">
         <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
           Committed to making a positive impact in our community.
         </h1>
@@ -25,7 +25,7 @@ export default function HeroSection() {
           </Button>
         </div>
       </div>
-      <Card>
+      <Card className="w-full">
         <CardContent className="p-0 aspect-video">
           <div className="relative w-full h-full bg-muted rounded-lg flex items-center justify-center">
             <YoutubeIcon className="w-12 h-12 text-muted-foreground" />
