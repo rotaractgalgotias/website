@@ -38,7 +38,7 @@ const PARTNER_LOGOS = [
 export default function PartnersSection() {
   return (
     <section className="w-full">
-      <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-center lg:-my-4">
+      <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-center lg:-my-6">
         {PARTNER_LOGOS.map((i, index) => (
           <Link
             href={i.href || "#"}
