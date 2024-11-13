@@ -52,7 +52,7 @@ export default function PartnersSection() {
               //   height={i.height}
               fill
               title={i.title}
-              className="opacity-70 hover:opacity-100 transition-opacity object-contain"
+              className="opacity-70 hover:opacity-100 transition-opacity object-contain scale-90 lg:scale-100"
             />
           </Link>
         ))}

@@ -7,22 +7,20 @@ export default function HeroSection() {
   return (
     <section className="w-full flex flex-col-reverse lg:flex-row gap-6 lg:gap-12 items-center">
       <div className="w-full space-y-6">
-        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl xl:text-5xl/none">
           Committed to making a positive impact in our community.
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           At Rotaract Galgotias, we function as a service-oriented organization
           that strives to create a better world through volunteerism, community
           service, and professional development.
         </p>
         <div className="flex gap-4">
-          <Button variant={"shine"} size="lg">
+          <Button variant={"shine"}>
             Join Now
             <ArrowRightIcon className="ml-2 h-4 w-4" />
           </Button>
-          <Button variant="outline" size="lg">
-            Know More
-          </Button>
+          <Button variant="outline">Know More</Button>
         </div>
       </div>
       <Card className="w-full">

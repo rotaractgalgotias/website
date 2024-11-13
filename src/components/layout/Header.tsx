@@ -1,8 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import MaxWidthWrapper from "../wrappers/MaxWidthWrapper";
 import { Button } from "../ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { MenuIcon } from "lucide-react";
 
 const NAV_LINKS = [
   "Home",
@@ -14,14 +18,15 @@ const NAV_LINKS = [
 ];
 
 export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <MaxWidthWrapper>
-        <div className="w-full flex h-16 items-center">
-          <Link href="/" className="flex items-center space-x-3">
+        <div className="container flex h-16 items-center justify-between">
+          <Link href="/" className="flex items-center space-x-2">
             <Image
               src="/logo.png"
-              alt="Rotaract Galgotias Logo"
+              alt="Rotaract Club Logo"
               width={40}
               height={40}
             />
@@ -32,7 +37,8 @@ export default function Header() {
               </span>
             </div>
           </Link>
-          <nav className="ml-auto flex">
+
+          <nav className="ml-auto hidden md:flex">
             {NAV_LINKS.map((item) => (
               <Link
                 key={item}
@@ -47,6 +53,32 @@ export default function Header() {
               </Link>
             ))}
           </nav>
+
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <MenuIcon className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <div className="flex flex-col space-y-4 mt-4">
+                {NAV_LINKS.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
+                    className="text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item}
+                  </Link>
+                ))}
+                <Button className="mt-4" onClick={() => setIsOpen(false)}>
+                  Join Now
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </MaxWidthWrapper>
     </header>
