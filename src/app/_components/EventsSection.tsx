@@ -76,7 +76,7 @@ export default function EventsSection() {
           <CarouselContent>
             {EVENTS_IMAGES.map((image, index) => (
               <CarouselItem key={index}>
-                <div className="p-1 relative h-[30rem]">
+                <div className="p-1 relative h-80 lg:h-[30rem]">
                   <Image
                     src={image.image}
                     alt={image.image}
