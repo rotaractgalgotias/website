@@ -67,7 +67,12 @@ export default function EventsSection() {
             </Card>
           </div>
         </div>
-        <Carousel className="w-full h-[inherit]">
+        <Carousel
+          className="w-full h-[inherit]"
+          opts={{
+            loop: true,
+          }}
+        >
           <CarouselContent>
             {EVENTS_IMAGES.map((image, index) => (
               <CarouselItem key={index}>
