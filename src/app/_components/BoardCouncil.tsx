@@ -42,7 +42,7 @@ const boardMembers = [
 
 export default function BoardCouncil() {
   return (
-    <section className="container py-12">
+    <section className="w-full">
       <h1 className="text-3xl font-bold text-center mb-12">
         Board Council 2024-25
       </h1>
