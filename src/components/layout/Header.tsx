@@ -42,7 +42,11 @@ export default function Header() {
             {NAV_LINKS.map((item) => (
               <Link
                 key={item}
-                href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
+                href={
+                  item === "Home"
+                    ? "/"
+                    : `/${item.toLowerCase().replaceAll(" ", "-")}`
+                }
               >
                 <Button
                   variant={"linkHover2"}
@@ -66,7 +70,11 @@ export default function Header() {
                 {NAV_LINKS.map((item, index) => (
                   <Link
                     key={index}
-                    href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
+                    href={
+                      item === "Home"
+                        ? "/"
+                        : `/${item.toLowerCase().replaceAll(" ", "-")}`
+                    }
                     className="text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
                     onClick={() => setIsOpen(false)}
                   >
