@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import MaxWidthWrapper from "../wrappers/MaxWidthWrapper";
+import { Button } from "../ui/button";
 
 const NAV_LINKS = [
   "Home",
@@ -31,14 +32,18 @@ export default function Header() {
               </span>
             </div>
           </Link>
-          <nav className="ml-auto flex gap-6">
+          <nav className="ml-auto flex">
             {NAV_LINKS.map((item) => (
               <Link
                 key={item}
                 href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
               >
-                {item}
+                <Button
+                  variant={"linkHover2"}
+                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary px-3"
+                >
+                  {item}
+                </Button>
               </Link>
             ))}
           </nav>
