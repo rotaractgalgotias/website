@@ -165,12 +165,14 @@ export default function AboutUs() {
 
         <section className="flex flex-col-reverse lg:flex-row-reverse gap-8 items-center">
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">Our Mission</h2>
-            <p className="text-muted-foreground">
-              We function as a service-oriented organization that aims to make a
-              positive impact in our community and beyond. As part of the global
-              network of Rotaract clubs sponsored by Rotary International, we
-              have access to a wealth of resources and opportunities for growth.
+            <h2 className="text-3xl font-semibold">Our Mission</h2>
+            <p className="text-muted-foreground text-lg">
+              At Rotaract Galgotias, we function as a service-oriented
+              organization that strives to create a better world through
+              volunteerism, community service, and professional development. We
+              are a part of the global network of Rotaract clubs sponsored by
+              Rotary International, which gives us access to a wealth of
+              resources and opportunities for growth.
             </p>
           </div>
           <Image
@@ -191,13 +193,18 @@ export default function AboutUs() {
             className="rounded-lg object-contain w-full h-[300px] md:order-last"
           />
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">Parent Club</h2>
-            <p className="text-muted-foreground">
-              The Rotary Club of Delhi SouthEnd proudly serves as our Parent
-              Club. Through this partnership, we nurture and support young
-              leaders, empowering them to create a positive impact in their
-              community and beyond. Together, we foster a spirit of service,
-              fellowship, and social responsibility.
+            <h2 className="text-3xl font-semibold">Parent Club</h2>
+            <p className="text-muted-foreground text-lg">
+              The Rotary Club of Delhi SouthEnd proudly serves as the Parent
+              Club of the Rotaract Club of Galgotias Educational Institutions.
+              Through this partnership, we nurture and support the young leaders
+              of the Rotaract Club, empowering them to create a positive impact
+              in their community and beyond. Together, we work hand in hand to
+              foster a spirit of service, fellowship, and social responsibility,
+              making a meaningful difference in the lives of those we touch.
+              Through collaborative efforts and shared values, we aim to build a
+              better future and inspire a new generation of compassionate
+              change-makers.
             </p>
           </div>
         </section>
