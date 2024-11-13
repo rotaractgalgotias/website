@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRightIcon, YoutubeIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -16,10 +17,12 @@ export default function HeroSection() {
           service, and professional development.
         </p>
         <div className="flex gap-4">
-          <Button variant={"shine"}>
-            Join Now
-            <ArrowRightIcon className="ml-2 h-4 w-4" />
-          </Button>
+          <Link href="/join-now">
+            <Button variant={"shine"}>
+              Join Now
+              <ArrowRightIcon className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
           <Button variant="outline">Know More</Button>
         </div>
       </div>
