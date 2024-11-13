@@ -4,6 +4,7 @@ import PartnersSection from "./_components/PartnersSection";
 import { Separator } from "@/components/ui/separator";
 import AboutSection from "./_components/AboutSection";
 import EventsSection from "./_components/EventsSection";
+import BoardCouncil from "./_components/BoardCouncil";
 
 export default function Home() {
   return (
@@ -28,6 +29,12 @@ export default function Home() {
       <div>
         <MaxWidthWrapper>
           <EventsSection />
+        </MaxWidthWrapper>
+      </div>
+      <Separator />
+      <div>
+        <MaxWidthWrapper>
+          <BoardCouncil />
         </MaxWidthWrapper>
       </div>
     </main>

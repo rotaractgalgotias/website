@@ -5,6 +5,7 @@ import TopHeader from "@/components/layout/TopHeader";
 import Header from "@/components/layout/Header";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
+import Footer from "@/components/layout/Footer";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -40,6 +41,7 @@ export default function RootLayout({
         <TopHeader />
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
