@@ -45,6 +45,7 @@ export default function Header() {
             {NAV_LINKS.map((item) => (
               <Link
                 key={item}
+                prefetch
                 href={
                   item === "Home"
                     ? "/"
@@ -80,6 +81,7 @@ export default function Header() {
                 {NAV_LINKS.map((item, index) => (
                   <Link
                     key={index}
+                    prefetch
                     href={
                       item === "Home"
                         ? "/"
