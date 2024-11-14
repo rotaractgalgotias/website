@@ -184,7 +184,7 @@ export default function AboutUs() {
           />
         </section>
 
-        <section className="flex flex-col lg:flex-row items-center">
+        <section className="flex flex-col lg:flex-row gap-8 items-center">
           <Image
             src="/about/parent.jpg"
             alt="Rotary Club of Delhi SouthEnd"

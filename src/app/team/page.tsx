@@ -1,19 +1,50 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
+import { currentYear } from "@/lib/utils";
 import { allPositions } from "@/utils/positions";
+import { Position } from "@prisma/client";
 import Image from "next/image";
 
 export default async function TeamPage() {
   const councilPromise = prisma.member.findMany({
     where: {
-      memberType: "COUNCIL",
+      roles: {
+        some: {
+          memberType: "COUNCIL",
+        },
+      },
+    },
+    include: {
+      roles: {
+        where: {
+          year: {
+            year: currentYear,
+          },
+        },
+      },
     },
   });
 
   const directorPromise = prisma.member.findMany({
     where: {
-      memberType: "DIRECTOR",
+      roles: {
+        some: {
+          year: {
+            year: currentYear,
+          },
+          memberType: "DIRECTOR",
+        },
+      },
+    },
+    include: {
+      roles: {
+        where: {
+          year: {
+            year: currentYear,
+          },
+        },
+      },
     },
   });
 
@@ -23,14 +54,19 @@ export default async function TeamPage() {
   ]);
 
   const sortedCouncil = council.sort((a, b) => {
-    const order = ["COUNCIL"];
+    const order = ["COUNCIL", "DIRECTOR", "COORDINATOR", "MEMBER"];
     const typeComparison =
-      order.indexOf(a.memberType) - order.indexOf(b.memberType);
+      order.indexOf(a.roles[0].memberType ?? "") -
+      order.indexOf(b.roles[0].memberType ?? "");
     if (typeComparison !== 0) return typeComparison;
 
-    if (a.memberType === "COUNCIL" && b.memberType === "COUNCIL") {
+    if (
+      (a.roles[0].memberType ?? "") === "COUNCIL" &&
+      (b.roles[0].memberType ?? "") === "COUNCIL"
+    ) {
       return (
-        allPositions.indexOf(a.position) - allPositions.indexOf(b.position)
+        allPositions.indexOf(a.roles[0].position as Position) -
+        allPositions.indexOf(b.roles[0].position as Position)
       );
     }
 
@@ -127,7 +163,7 @@ export default async function TeamPage() {
                 </Avatar>
                 <h3 className="font-medium text-sm">{member.name}</h3>
                 <p className="text-xs text-muted-foreground">
-                  {member.position}
+                  {member.roles[0].position}
                 </p>
               </div>
             ))}
@@ -151,7 +187,7 @@ export default async function TeamPage() {
                 </Avatar>
                 <h3 className="font-medium text-sm">{member.name}</h3>
                 <p className="text-xs text-muted-foreground">
-                  {member.position}
+                  {member.roles[0].position}
                 </p>
               </div>
             ))}
