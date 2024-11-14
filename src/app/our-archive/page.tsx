@@ -1,6 +1,7 @@
 import { Metadata } from "next";
-import React from "react";
 import OurArchivePage from "./_components/Archive";
+import { prisma } from "@/lib/prisma";
+import { currentYear } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Our Archive",
@@ -10,10 +11,35 @@ export const metadata: Metadata = {
   },
 };
 
-export default function page() {
+export default async function page() {
+  const years = await prisma.year.findMany({
+    include: {
+      roles: {
+        where: {
+          position: "PRESIDENT",
+        },
+        select: {
+          member: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+    where: {
+      year: {
+        not: currentYear,
+      },
+    },
+  });
+
+  console.log(years);
+
+  // write a function to convert 2024 to 2024-
   return (
     <div>
-      <OurArchivePage />
+      <OurArchivePage tenures={years} />
     </div>
   );
 }

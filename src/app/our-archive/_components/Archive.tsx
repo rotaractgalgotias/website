@@ -2,43 +2,28 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
+import MaxWidthWrapper from "@/components/wrappers/MaxWidthWrapper";
 
-const tenures = [
-  {
-    year: "2023-24",
-    president: "John Doe",
-    image: "/placeholder.svg?height=400&width=600",
-  },
-  {
-    year: "2022-23",
-    president: "Alice Johnson",
-    image: "/placeholder.svg?height=400&width=600",
-  },
-  {
-    year: "2021-22",
-    president: "Charlie Brown",
-    image: "/placeholder.svg?height=400&width=600",
-  },
-  {
-    year: "2020-21",
-    president: "Eva Green",
-    image: "/placeholder.svg?height=400&width=600",
-  },
-  {
-    year: "2019-20",
-    president: "George Black",
-    image: "/placeholder.svg?height=400&width=600",
-  },
-];
-
-export default function OurArchivePage() {
+export default function OurArchivePage({
+  tenures,
+}: {
+  tenures: {
+    roles: {
+      member: {
+        name: string;
+      };
+    }[];
+    id: string;
+    year: number;
+    imageUrl: string | null;
+  }[];
+}) {
   return (
-    <div className="container mx-auto px-4 py-12">
+    <MaxWidthWrapper className="py-6 lg:py-8">
       <motion.h1
-        className="text-4xl font-bold text-center mb-4"
+        className="text-3xl font-bold text-center"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -46,14 +31,14 @@ export default function OurArchivePage() {
         Our Archive
       </motion.h1>
       <motion.p
-        className="text-xl text-muted-foreground text-center mb-12"
+        className="text-muted-foreground text-center mb-8 lg:mb-10"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         Explore our journey through the years and the impact we&apos;ve made
       </motion.p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {tenures.map((tenure, index) => (
           <motion.div
             key={tenure.year}
@@ -61,30 +46,37 @@ export default function OurArchivePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <Link href={`/our-archive/${tenure.year}`} className="block h-full">
-              <Card className="h-full flex flex-col overflow-hidden transition-transform duration-200 hover:scale-105">
-                <div className="relative h-48 w-full">
+            <Link href={`/our-archive/${tenure.year}`} className="block group">
+              <div className="relative overflow-hidden rounded-lg shadow-lg">
+                <div className="relative h-64 w-full">
                   <Image
-                    src={tenure.image}
+                    src={tenure.imageUrl as string}
                     alt={`Tenure ${tenure.year}`}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover"
+                    className="object-cover transition-transform duration-300 group-hover:scale-110"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                 </div>
-                <CardHeader>
-                  <CardTitle>{tenure.year}</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p>
-                    <strong>President:</strong> {tenure.president}
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    {tenure.year}
+                  </h3>
+                  <p className="text-white/80">
+                    President:{" "}
+                    <span className="text-primary-foreground font-medium">
+                      {tenure.roles[0].member.name}
+                    </span>
                   </p>
-                </CardContent>
-              </Card>
+                </div>
+                <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-semibold">
+                  Archive
+                </div>
+              </div>
             </Link>
           </motion.div>
         ))}
       </div>
-    </div>
+    </MaxWidthWrapper>
   );
 }
