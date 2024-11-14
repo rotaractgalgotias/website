@@ -1,14 +1,19 @@
 import { Metadata } from "next";
 import React from "react";
+import OurArchivePage from "./_components/Archive";
 
 export const metadata: Metadata = {
-  title: "Events",
+  title: "Our Archive",
   openGraph: {
     description:
-      "We organize a variety of fundraising activities, community service projects, and professional development workshops throughout the year. Join us in creating meaningful impact in our community.",
+      "Explore our archive of past events, projects, and activities. Discover the impact we've made in our community over the years.",
   },
 };
 
 export default function page() {
-  return <div>page</div>;
+  return (
+    <div>
+      <OurArchivePage />
+    </div>
+  );
 }
