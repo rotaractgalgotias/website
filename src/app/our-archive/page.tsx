@@ -34,8 +34,6 @@ export default async function page() {
     },
   });
 
-  console.log(years);
-
   // write a function to convert 2024 to 2024-
   return (
     <div>
