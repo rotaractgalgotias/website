@@ -4,17 +4,17 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { CalendarIcon, MapPinIcon, UsersIcon, ClockIcon } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { currentYear } from "@/lib/utils";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: Props): //   parent: ResolvingMetadata
+Promise<Metadata> {
   const slug = (await params).slug;
   // read route params
   const event = await prisma.event.findUnique({
@@ -31,12 +31,12 @@ export async function generateMetadata(
   }
 
   // optionally access and extend (rather than replace) parent metadata
-  const previousImages = (await parent).openGraph?.images || [];
+  //   const previousImages = (await parent).openGraph?.images || [];
 
   return {
     title: event.title,
     openGraph: {
-      images: [event.coverImage, ...previousImages],
+      images: [event.coverImage],
       description: event.description,
       title: event.title,
     },
