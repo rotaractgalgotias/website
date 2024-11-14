@@ -3,6 +3,15 @@ import { prisma } from "@/lib/prisma";
 import { currentYear } from "@/lib/utils";
 import EventCard from "./_components/EventCard";
 import Heading from "./_components/Heading";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Events",
+  openGraph: {
+    description:
+      "We organize a variety of fundraising activities, community service projects, and professional development workshops throughout the year. Join us in creating meaningful impact in our community.",
+  },
+};
 
 export default async function EventsPage() {
   const events = await prisma.event.findMany({

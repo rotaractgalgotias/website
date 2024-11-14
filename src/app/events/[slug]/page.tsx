@@ -4,6 +4,47 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { CalendarIcon, MapPinIcon, UsersIcon, ClockIcon } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { currentYear } from "@/lib/utils";
+import { Metadata, ResolvingMetadata } from "next";
+
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const slug = (await params).slug;
+  // read route params
+  const event = await prisma.event.findUnique({
+    where: {
+      slug,
+      year: {
+        year: currentYear,
+      },
+    },
+  });
+
+  if (!event) {
+    notFound();
+  }
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: event.title,
+    openGraph: {
+      images: [event.coverImage, ...previousImages],
+      description: event.description,
+      title: event.title,
+    },
+    twitter: {
+      site: "https://rotaractgalgotias.org/",
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const events = await prisma.event.findMany({
@@ -42,7 +83,7 @@ export default async function page({
   }
   return (
     <div className="min-h-screen bg-background">
-      <div className="relative h-[50vh] md:h-[60vh] w-full">
+      <div className="relative h-[50vh] md:h-[65vh] w-full">
         <Image
           src={event.coverImage}
           alt={event.title}
@@ -51,7 +92,7 @@ export default async function page({
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/10 to-background" />
         <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-3xl md:text-5xl font-bold text-primary mb-4 drop-shadow-lg">

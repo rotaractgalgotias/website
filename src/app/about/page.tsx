@@ -14,6 +14,7 @@ import {
   Wrench,
   UserPlus,
 } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 
 const domains = [
@@ -150,6 +151,14 @@ const domains = [
     ],
   },
 ];
+
+export const metadata: Metadata = {
+  title: "About Us",
+  openGraph: {
+    description:
+      "Learn more about Rotaract Galgotias, our mission, and the various domains we work in to create a positive impact in our community.",
+  },
+};
 
 export default function AboutUs() {
   return (

@@ -4,7 +4,16 @@ import { prisma } from "@/lib/prisma";
 import { currentYear } from "@/lib/utils";
 import { allPositions } from "@/utils/positions";
 import { Position } from "@prisma/client";
+import { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Team",
+  openGraph: {
+    description:
+      "Meet the dedicated team members of Rotaract Galgotias who are committed to making a difference through various initiatives and projects.",
+  },
+};
 
 export default async function TeamPage() {
   const councilPromise = prisma.member.findMany({
