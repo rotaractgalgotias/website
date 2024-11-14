@@ -77,8 +77,6 @@ export default async function TeamPage() {
     { title: "Board Council", members: council },
     { title: "Board of Directors", members: director },
   ];
-
-  console.log(council);
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 lg:py-16">

@@ -1,24 +1,41 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
+import { currentYear } from "@/lib/utils";
 import { allPositions } from "@/utils/positions";
+import { Position } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 
 export default async function BoardCouncil() {
   // Fetch all members from the database
-  const members = await prisma.member.findMany();
+  const members = await prisma.member.findMany({
+    include: {
+      roles: {
+        where: {
+          year: {
+            year: currentYear,
+          },
+        },
+      },
+    },
+  });
 
   // Sort members by their position and type
   const sortedMembers = members.sort((a, b) => {
-    const order = ["COUNCIL", "DIRECTOR", "COORDINATOR"];
+    const order = ["COUNCIL", "DIRECTOR", "COORDINATOR", "MEMBER"];
     const typeComparison =
-      order.indexOf(a.memberType) - order.indexOf(b.memberType);
+      order.indexOf(a.roles[0].memberType) -
+      order.indexOf(b.roles[0].memberType);
     if (typeComparison !== 0) return typeComparison;
 
-    if (a.memberType === "COUNCIL" && b.memberType === "COUNCIL") {
+    if (
+      a.roles[0].memberType === "COUNCIL" &&
+      b.roles[0].memberType === "COUNCIL"
+    ) {
       return (
-        allPositions.indexOf(a.position) - allPositions.indexOf(b.position)
+        allPositions.indexOf(a.roles[0]?.position as Position) -
+        allPositions.indexOf(b.roles[0]?.position as Position)
       );
     }
 
@@ -27,14 +44,14 @@ export default async function BoardCouncil() {
 
   // Shuffle all members except council members
   const shuffledMembers = sortedMembers
-    .filter((member) => member.memberType !== "COUNCIL")
+    .filter((member) => member.roles[0].memberType !== "COUNCIL")
     .sort(() => Math.random() - 0.5);
 
   const slicedMembers = shuffledMembers.slice(0, 10);
 
   // Filter only council members
   const councilMembers = sortedMembers.filter(
-    (member) => member.memberType === "COUNCIL"
+    (member) => member.roles[0].memberType === "COUNCIL"
   );
 
   return (
@@ -53,7 +70,9 @@ export default async function BoardCouncil() {
               <AvatarFallback>{member.name.split(" ")[0]}</AvatarFallback>
             </Avatar>
             <h3 className="font-medium">{member.name}</h3>
-            <p className="text-sm text-muted-foreground">{member.position}</p>
+            <p className="text-sm text-muted-foreground">
+              {member.roles[0].position}
+            </p>
           </div>
         ))}
       </div>

@@ -7,18 +7,21 @@ import MaxWidthWrapper from "../wrappers/MaxWidthWrapper";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   "Home",
   "About",
   "Team",
   "Events",
-  "Past Teams",
+  "Our Archive",
   "Sponsor Us",
 ];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <MaxWidthWrapper>
@@ -50,7 +53,14 @@ export default function Header() {
               >
                 <Button
                   variant={"linkHover2"}
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary px-3"
+                  className={cn(
+                    "text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-primary hover:scale-110 px-3",
+                    {
+                      "text-primary scale-110":
+                        pathname ===
+                        `/${item.toLowerCase().replaceAll(" ", "-")}`,
+                    }
+                  )}
                 >
                   {item}
                 </Button>
