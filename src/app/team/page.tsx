@@ -23,6 +23,7 @@ export default async function TeamPage() {
           memberType: "COUNCIL",
         },
       },
+      verified: true,
     },
     include: {
       roles: {
@@ -45,6 +46,7 @@ export default async function TeamPage() {
           memberType: "DIRECTOR",
         },
       },
+      verified: true,
     },
     include: {
       roles: {

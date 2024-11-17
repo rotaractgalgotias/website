@@ -21,6 +21,9 @@ export default async function Home() {
         },
       },
     },
+    where: {
+      verified: true,
+    },
   });
   // Sort members by their position and type
   const sortedMembers = members.sort((a, b) => {
