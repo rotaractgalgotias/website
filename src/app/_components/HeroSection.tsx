@@ -1,11 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { Suspense } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRightIcon, YoutubeIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { VideoPlayer } from "./video-player";
 
 export default function HeroSection() {
   return (
@@ -40,13 +41,15 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          <Link href="/join-now">
+          <Link href="/join-now" prefetch>
             <Button variant={"shine"}>
               Join Now
               <ArrowRightIcon className="ml-2 h-4 w-4" />
             </Button>
           </Link>
-          <Button variant="outline">Know More</Button>
+          <Link href={"/about"} prefetch>
+            <Button variant="outline">Know More</Button>
+          </Link>
         </motion.div>
       </motion.div>
       <motion.div
@@ -56,15 +59,10 @@ export default function HeroSection() {
         transition={{ duration: 0.5 }}
       >
         <Card>
-          <CardContent className="p-0 aspect-video">
-            <motion.div
-              className="relative w-full h-full bg-muted rounded-lg flex items-center justify-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300, damping: 10 }}
-            >
-              <YoutubeIcon className="w-12 h-12 text-muted-foreground" />
-              <span className="sr-only">Watch our introduction video</span>
-            </motion.div>
+          <CardContent className="p-0 overflow-hidden">
+            <Suspense fallback={<div>Loading...</div>}>
+              <VideoPlayer />
+            </Suspense>
           </CardContent>
         </Card>
       </motion.div>
