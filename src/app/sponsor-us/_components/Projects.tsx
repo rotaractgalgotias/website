@@ -20,7 +20,7 @@ function Projects({ projects }: { projects: Event[] }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <Link href={`/project/${project.id}`} className="block group">
+                <Link href={`/project/${project.slug}`} className="block group">
                   <div className="relative overflow-hidden rounded-lg shadow-lg">
                     <div className="relative h-64 w-full">
                       <Image
