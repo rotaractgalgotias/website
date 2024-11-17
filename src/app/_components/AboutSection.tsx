@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function AboutSection() {
   return (
@@ -77,7 +78,9 @@ export default function AboutSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          <Button variant="linkHover2">Learn More About Us</Button>
+          <Link href={"/about"}>
+            <Button variant="linkHover2">Learn More About Us</Button>
+          </Link>
         </motion.div>
       </motion.div>
     </section>
