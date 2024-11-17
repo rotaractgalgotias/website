@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import LayoutProvider from "@/components/providers/LayoutProvider";
+import { Suspense } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -54,7 +55,9 @@ export default function RootLayout({
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         className={cn(inter.className, "antialiased")}
       >
-        <LayoutProvider>{children}</LayoutProvider>
+        <Suspense>
+          <LayoutProvider>{children}</LayoutProvider>
+        </Suspense>
       </body>
     </html>
   );
