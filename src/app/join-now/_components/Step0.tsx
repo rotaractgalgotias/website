@@ -19,7 +19,7 @@ export default function Step0({
           className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent transition-colors"
         >
           <div className="flex items-center gap-4">
-            <Avatar className="h-12 w-12">
+            <Avatar className="h-12 w-12 hidden lg:flex">
               {/* <AvatarImage src={club.image} alt={club.name} /> */}
               <AvatarFallback>
                 {club.name.trim() ===
