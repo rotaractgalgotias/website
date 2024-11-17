@@ -8,75 +8,47 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
-  role      Roles    @default(EDITOR)
-  verified  Boolean  @default(false)
-  firstTime Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Event {
-  id                 String   @id @default(cuid())
-  title              String
-  slug               String   @unique
-  description        String
-  content            String
-  date               DateTime
-  location           String
-  numberOfVolunteers Int?
-  peopleImpacted     Int?
-  duration           Int?
-  coverImage         String
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-  yearId             String
-  featured           Boolean  @default(false)
-  year               Year     @relation(fields: [yearId], references: [id], onDelete: Cascade)
-}
-
-model ActivityLog {
-  id        String          @id @default(cuid())
-  action    ActivityActions
-  timestamp DateTime        @default(now())
-  details   String?
-}
-
-model Year {
-  id       String       @id @default(cuid())
-  year     Int          @unique
-  imageUrl String?
-  events   Event[]
-  roles    MemberRole[]
-}
-
-model Member {
-  id        String       @id @default(cuid())
-  name      String
-  imageUrl  String
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  roles     MemberRole[]
-}
-
-model MemberRole {
-  id         String     @id @default(cuid())
-  position   Position
-  memberType MemberType
-  yearId     String
-  memberId   String
-  member     Member     @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  year       Year       @relation(fields: [yearId], references: [id], onDelete: Cascade)
-
-  @@unique([memberId, yearId])
+  role      Roles     @default(EDITOR)
+  verified  Boolean   @default(false)
+  firstTime Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 enum Roles {
   ADMIN
   EDITOR
+}
+
+model Event {
+  id                 String    @id @default(cuid())
+  title              String
+  slug               String    @unique
+  description        String
+  content            String    // Stores MDX content for the event
+  date               DateTime  // The date of the event
+  location           String    // Event location
+  numberOfVolunteers Int?      // Number of volunteers who participated
+  peopleImpacted     Int?      // Number of people impacted by the event
+  duration           Int?      // Duration of the event in hours
+  coverImage         String
+  featured           Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  yearId             String
+  year               Year     @relation(fields: [yearId], references: [id], onDelete: Cascade)
+}
+
+model ActivityLog {
+  id          String    @id @default(cuid())
+  action      ActivityActions
+  timestamp   DateTime  @default(now())
+  details     String?   // Optional details about the action
 }
 
 enum ActivityActions {
@@ -85,11 +57,65 @@ enum ActivityActions {
   DELETE
 }
 
+model Year {
+  id      String   @id @default(cuid())
+  year    Int      @unique // Stores the year (e.g., 2024)
+  imageUrl String?  // URL to the year's image
+
+  events  Event[]  // Related events for this year
+  roles   MemberRole[] // Related member roles for this year
+}
+
+model Member {
+  id        String       @id @default(cuid())
+  name      String
+  imageUrl  String       // URL to the member's profile image
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  collegeId String       @default("cm3lmrtyx0000xz75u4u9jg35")
+  college   College      @relation(fields: [collegeId], references: [id])
+  verified  Boolean      @default(false)
+
+  // New fields to store the member's details
+  email     String?
+  phone     String?
+  year      String?          // Year the member joined the club
+  branch    String?       // Branch of study
+  whatsappNumber String? // WhatsApp number
+  referralSource String? // How the member heard about the club
+  membershipType String?
+  
+  // New field to relate to the historical roles
+  roles      MemberRole[]
+}
+
+model College {
+  id        String    @id @default(cuid())
+  name      String
+  whatsappGroupLink String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  members    Member[]
+}
+
+model MemberRole {
+  id         String     @id @default(cuid())
+  position   Position   // Position held by the member for this year
+  memberType MemberType // Type of member (e.g., COUNCIL, DIRECTOR)
+  year       Year       @relation(fields: [yearId], references: [id], onDelete: Cascade)  // Added cascade delete
+  yearId     String
+  member     Member     @relation(fields: [memberId], references: [id], onDelete: Cascade)  // Added cascade delete
+  memberId   String
+
+   @@unique([memberId, yearId]) // Ensure each member has only one role per year
+}
+
 enum MemberType {
-  COUNCIL
-  DIRECTOR
-  COORDINATOR
-  MEMBER
+  COUNCIL    // Board Council
+  DIRECTOR   // Board of Directors
+  COORDINATOR // Coordinator
+  MEMBER     // Regular Member
 }
 
 enum Position {

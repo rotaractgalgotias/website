@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import LayoutProvider from "@/components/providers/LayoutProvider";
 import { Suspense } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,6 +58,7 @@ export default function RootLayout({
       >
         <Suspense>
           <LayoutProvider>{children}</LayoutProvider>
+          <Toaster />
         </Suspense>
       </body>
     </html>
