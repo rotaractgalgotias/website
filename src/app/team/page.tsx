@@ -170,7 +170,7 @@ export default async function TeamPage() {
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <h3 className="font-medium text-sm">{member.name}</h3>
+                <h3 className="font-medium text-sm">Rtr. {member.name}</h3>
                 <p className="text-xs text-muted-foreground">
                   {member.roles[0].position}
                 </p>
@@ -194,7 +194,7 @@ export default async function TeamPage() {
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <h3 className="font-medium text-sm">{member.name}</h3>
+                <h3 className="font-medium text-sm">Rtr. {member.name}</h3>
                 <p className="text-xs text-muted-foreground">
                   {member.roles[0].position}
                 </p>

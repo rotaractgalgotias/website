@@ -96,10 +96,12 @@ export default function EventsSection() {
                     We are always open to new ideas and suggestions. If you have
                     an idea for an event, please let us know.
                   </p>
+                  <Link href={"/contact-us"}>
                   <Button variant="link" className="p-0">
                     Contact us
                     <ArrowRightIcon className="ml-2 h-4 w-4" />
                   </Button>
+                  </Link>
                 </CardContent>
               </Card>
             </motion.div>

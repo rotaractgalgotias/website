@@ -12,35 +12,34 @@ import MaxWidthWrapper from "../wrappers/MaxWidthWrapper";
 
 const footerLinks = {
   about: [
-    { name: "Rotaract", href: "#" },
-    { name: "Rotary", href: "#" },
-    { name: "Rotarct District 3011", href: "#" },
-    { name: "Club History", href: "#" },
-    { name: "Our Events", href: "#" },
+    { name: "Rotaract", href: "https://www.rotary.org/en" },
+    { name: "Rotary", href: "https://www.rotary.org/en" },
+    { name: "Rotarct District 3011", href: "https://www.rotaractdistrict3011.org/" },
+    { name: "Club History", href: "/our-archive" },
+    { name: "Our Events", href: "/events" },
   ],
   team: [
-    { name: "Team Page", href: "#" },
-    { name: "Board Council", href: "#" },
-    { name: "Board of Directors", href: "#" },
-    { name: "Coordinators", href: "#" },
-    { name: "Past Teams", href: "#" },
+    { name: "Team Page", href: "/team" },
+    { name: "Board Council", href: "/team/#boardcoumcil" },
+    { name: "Board of Directors", href: "/team/#boardOfDirectors" },
+    { name: "Past Teams", href: "/our-archive" },
   ],
   documents: [
-    { name: "Newsletters", href: "#" },
-    { name: "Reports", href: "#" },
-    { name: "Club Aggrements", href: "#" },
+    { name: "Newsletters", href: "/" },
+    { name: "Reports", href: "/" },
+    { name: "Club Aggrements", href: "/" },
     { name: "Media Kit", href: "#" },
-    { name: "Press Release", href: "#" },
+    { name: "Press Release", href: "/" },
   ],
 };
 
 const socialLinks = [
-  { icon: Facebook, href: "#" },
-  { icon: Instagram, href: "#" },
-  { icon: Twitter, href: "#" },
-  { icon: Youtube, href: "#" },
-  { icon: Linkedin, href: "#" },
-  { icon: Threads, href: "#" },
+  { icon: Facebook, href: "https://www.facebook.com/RotaractGEI?mibextid=ZbWKwL" },
+  { icon: Instagram, href: "https://www.instagram.com/rotaract_galgotias" },
+  { icon: Twitter, href: "https://x.com/rotaractGEI?t=ABHSgBJ-SOAbS7yvwIe9cA&s=09" },
+  { icon: Youtube, href: "https://youtube.com/@rotaractgalgotias" },
+  { icon: Linkedin, href: "https://www.linkedin.com/company/rotaract-club-of-galgotias-educational-institutions/" },
+  { icon: Threads, href: "https://www.threads.net/@rotaract_galgotias" },
 ];
 
 export default function Footer() {
@@ -78,6 +77,7 @@ export default function Footer() {
                       key={index}
                       href={social.href}
                       className="text-muted-foreground hover:text-primary transition-colors"
+                      target="_blank"
                     >
                       <Icon className="h-5 w-5" />
                       <span className="sr-only">{social.icon.name}</span>
