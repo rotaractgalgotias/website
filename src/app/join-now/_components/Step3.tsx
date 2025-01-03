@@ -14,14 +14,10 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import Image from "next/image";
 
 const formSchema = z.object({
   confirmInformation: z.boolean().refine((value) => value === true, {
     message: "You must confirm that the information is correct",
-  }),
-  confirmPayment: z.boolean().refine((value) => value === true, {
-    message: "You must confirm that you've made the payment",
   }),
 });
 
@@ -49,11 +45,9 @@ export default function Step3({
     resolver: zodResolver(formSchema),
     defaultValues: {
       confirmInformation: false,
-      confirmPayment: false,
     },
     values: {
       confirmInformation: false,
-      confirmPayment: membershipDetails.membershipType !== "full",
     },
   });
 
@@ -87,24 +81,6 @@ export default function Step3({
           Referral Source: {formData.referral}
         </p>
       </div>
-      {membershipDetails.membershipType === "full" && (
-        <div className="space-y-2">
-          <h3 className="text-lg font-medium">Payment</h3>
-          <p>Membership Fee: ₹350</p>
-          <div className="flex justify-center">
-            <Image
-              src="/payment.jpeg"
-              alt="Payment QR Code"
-              width={200}
-              height={200}
-              className="border p-2"
-            />
-          </div>
-          <p className="text-center text-sm text-muted-foreground">
-            Scan the QR code to make the payment
-          </p>
-        </div>
-      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -131,31 +107,6 @@ export default function Step3({
               </FormItem>
             )}
           />
-          {membershipDetails.membershipType === "full" && (
-            <FormField
-              control={form.control}
-              name="confirmPayment"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>
-                      I confirm that I have made the payment
-                    </FormLabel>
-                    <FormDescription>
-                      By checking this box, you confirm that you have scanned
-                      the QR code and completed the payment.
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-          )}
 
           <Button type="submit" className="w-full">
             <Check className="w-4 h-4 mr-2" />

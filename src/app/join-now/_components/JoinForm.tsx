@@ -20,7 +20,6 @@ import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
 import { toast } from "sonner";
-import { addNewMember } from "../actions";
 
 const steps = [
   {
@@ -81,14 +80,32 @@ export default function JoinForm({
     const toastId = toast.loading("Submitting your application...");
 
     try {
-      const response = await addNewMember({ data: payload });
+      const googleFormFields: Record<string, string> = {
+        email: "entry.1219425003",
+        name: "entry.279267065",
+        year: "entry.1322653397",
+        branch: "entry.1891920853",
+        whatsappNumber: "entry.433756221",
+        callingNumber: "entry.532101315",
+        referral: "entry.1517602782",
+      };
 
-      if (response.success) {
-        toast.success(response.message, { id: toastId });
-        setCurrentStep(4);
-      } else {
-        toast.error(response.message, { id: toastId });
-      }
+      const url = new URL(
+        `https://docs.google.com/forms/d/e/1FAIpQLSdNZFtEsPdc7kkPohz59DgsgzIqIiY1ze488YpgbfcRIEBHFg/viewform`
+      );
+      const params = new URLSearchParams();
+
+      params.append(googleFormFields["email"], payload.email);
+      params.append(googleFormFields["name"], payload.name);
+      params.append(googleFormFields["year"], payload.year);
+      params.append(googleFormFields["branch"], payload.branch);
+      params.append(googleFormFields["whatsappNumber"], payload.whatsappNumber);
+      params.append(googleFormFields["callingNumber"], payload.callingNumber);
+      params.append(googleFormFields["referral"], payload.referral);
+
+      url.search = params.toString();
+      window.open(url.toString(), "_blank");
+      // console.log(url.toString());
     } catch (error) {
       toast.error("An error occurred. Please try again later.", {
         id: toastId,
