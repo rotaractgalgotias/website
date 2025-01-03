@@ -105,7 +105,6 @@ export default function JoinForm({
 
       url.search = params.toString();
       window.open(url.toString(), "_blank");
-      // console.log(url.toString());
     } catch (error) {
       toast.error("An error occurred. Please try again later.", {
         id: toastId,
