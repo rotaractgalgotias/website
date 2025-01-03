@@ -154,7 +154,7 @@ export default async function TeamPage() {
           </Card>
         </div>
 
-        <div className="mb-12">
+        <div className="mb-12" id="boardCouncil">
           <h2 className="text-2xl lg:text-3xl font-semibold mb-6">
             Board Council
           </h2>
@@ -178,7 +178,7 @@ export default async function TeamPage() {
             ))}
           </div>
         </div>
-        <div>
+        <div id="boardOfDirectors">
           <h2 className="text-2xl lg:text-3xl font-semibold mb-6">
             Board Of Directors
           </h2>
