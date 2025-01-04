@@ -147,7 +147,7 @@ export function ContactForm({
               transition={{ delay: 1 }}
             >
               <Image
-                src="contact.jpg"
+                src="/contact.jpg"
                 alt="Location map"
                 fill
                 className="absolute inset-0 w-full h-full object-cover shadow-md"
