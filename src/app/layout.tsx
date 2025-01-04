@@ -38,7 +38,20 @@ export const metadata: Metadata = {
     type: "website",
   },
   manifest: "/manifest.json",
-  keywords: [],
+  keywords: [
+    "Rotaract",
+    "Rotaract Galgotias",
+    "Rotaract Club",
+    "Galgotias University",
+    "Community Service",
+    "Volunteerism",
+    "Professional Development",
+    "Rotary International",
+    "Student Organization",
+    "Social Impact",
+    "Leadership Development",
+    "Youth Service",
+  ],
   alternates: {
     canonical: "/",
     languages: {
