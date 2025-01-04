@@ -4,46 +4,46 @@ export const CONTACT_CARDS = [
   {
     icon: MapPin,
     title: "Visit Us",
-    content: "Galgotias Educational Institutions Campus, Greater Noida",
+    content: "Galgotias Educational Institute of Technology, Greater Noida"
   },
   {
     icon: Phone,
-    title: "Call Us",
-    content: "+91 123 456 7890",
+    title: "Call Us (Divyanshu Khatiyar)",
+    content: "+91 97945-65358"
   },
   {
     icon: Mail,
     title: "Email Us",
-    content: "rotaract@galgotias.edu",
+    content: "contact@rotaractgalgotias.org"
   },
   {
     icon: Clock,
-    title: "Office Hours",
-    content: "Monday - Friday\n9:00 AM - 5:00 PM",
-  },
-];
+    title: "Available Hours",
+    content: "Anytime"
+  }
+]
 
 export const FORM_FIELDS = [
   {
-    name: "firstName" as const,
-    label: "First name",
-    placeholder: "John",
-    type: "text",
-    className: "col-span-1",
+    name: 'firstName' as const,
+    label: 'First name',
+    placeholder: 'Enter your first name',
+    type: 'text',
+    className: 'col-span-1'
   },
   {
-    name: "lastName" as const,
-    label: "Last name",
-    placeholder: "Doe",
-    type: "text",
-    className: "col-span-1",
+    name: 'lastName' as const,
+    label: 'Last name', 
+    placeholder: 'Enter your last name',
+    type: 'text',
+    className: 'col-span-1'
   },
   {
-    name: "email" as const,
-    label: "Email",
-    placeholder: "john@example.com",
-    type: "email",
-    className: "col-span-2",
+    name: 'email' as const,
+    label: 'Email',
+    placeholder: 'abc@gmail.com',
+    type: 'email',
+    className: 'col-span-2'
   },
   {
     name: "subject" as const,
