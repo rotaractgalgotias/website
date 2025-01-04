@@ -7,6 +7,7 @@ import {
   Youtube,
   Linkedin,
   TreesIcon as Threads,
+  GithubIcon,
 } from "lucide-react";
 import MaxWidthWrapper from "../wrappers/MaxWidthWrapper";
 
@@ -14,7 +15,10 @@ const footerLinks = {
   about: [
     { name: "Rotaract", href: "https://www.rotary.org/en" },
     { name: "Rotary", href: "https://www.rotary.org/en" },
-    { name: "Rotarct District 3011", href: "https://www.rotaractdistrict3011.org/" },
+    {
+      name: "Rotarct District 3011",
+      href: "https://www.rotaractdistrict3011.org/",
+    },
     { name: "Club History", href: "/our-archive" },
     { name: "Our Events", href: "/events" },
   ],
@@ -34,12 +38,25 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Facebook, href: "https://www.facebook.com/RotaractGEI?mibextid=ZbWKwL" },
+  {
+    icon: Facebook,
+    href: "https://www.facebook.com/RotaractGEI?mibextid=ZbWKwL",
+  },
   { icon: Instagram, href: "https://www.instagram.com/rotaract_galgotias" },
-  { icon: Twitter, href: "https://x.com/rotaractGEI?t=ABHSgBJ-SOAbS7yvwIe9cA&s=09" },
+  {
+    icon: Twitter,
+    href: "https://x.com/rotaractGEI?t=ABHSgBJ-SOAbS7yvwIe9cA&s=09",
+  },
   { icon: Youtube, href: "https://youtube.com/@rotaractgalgotias" },
-  { icon: Linkedin, href: "https://www.linkedin.com/company/rotaract-club-of-galgotias-educational-institutions/" },
+  {
+    icon: Linkedin,
+    href: "https://www.linkedin.com/company/rotaract-club-of-galgotias-educational-institutions/",
+  },
   { icon: Threads, href: "https://www.threads.net/@rotaract_galgotias" },
+  {
+    icon: GithubIcon,
+    href: "https://github.com/rotaractgalgotias/website-rewrite",
+  },
 ];
 
 export default function Footer() {
