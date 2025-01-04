@@ -115,7 +115,7 @@ export default function Step1({
               <FormItem>
                 <FormLabel>Year</FormLabel>
                 <FormControl>
-                  <Input placeholder="YYYY" {...field} />
+                  <Input placeholder="Eg. First, Second....." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

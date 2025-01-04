@@ -19,7 +19,6 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
-import { toast } from "sonner";
 
 const steps = [
   {
@@ -77,8 +76,6 @@ export default function JoinForm({
       collegeId,
     };
 
-    const toastId = toast.loading("Submitting your application...");
-
     try {
       const googleFormFields: Record<string, string> = {
         email: "entry.1219425003",
@@ -106,9 +103,6 @@ export default function JoinForm({
       url.search = params.toString();
       window.open(url.toString(), "_blank");
     } catch (error) {
-      toast.error("An error occurred. Please try again later.", {
-        id: toastId,
-      });
       console.error(error);
     }
   };
