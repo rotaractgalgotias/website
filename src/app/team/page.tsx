@@ -39,7 +39,7 @@ export default async function TeamPage() {
   const directorPromise = prisma.member.findMany({
     where: {
       roles: {
-        some: {
+        every: {
           year: {
             year: currentYear,
           },
