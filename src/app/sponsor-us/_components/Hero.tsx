@@ -1,7 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
 
 function Hero() {
@@ -45,10 +46,12 @@ function Hero() {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.6 }}
             >
-              <Button className="bg-white text-[#09090B] hover:bg-gray-200 text-lg px-8 py-6 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
-                Get Started
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              <Link className="block" href="/contact-us">
+                <Button className="bg-white text-[#09090B] hover:bg-gray-200 text-lg px-8 py-6 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
+                  Get Started
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
             </motion.div>
           </div>
           <motion.div
