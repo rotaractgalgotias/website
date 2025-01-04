@@ -71,7 +71,7 @@ export default function OurArchivePage({
                   <p className="text-white/80">
                     President:{" "}
                     <span className="text-primary-foreground font-medium">
-                      {tenure.roles[0].member.name}
+                      Rtr. {tenure.roles[0].member.name}
                     </span>
                   </p>
                 </div>
