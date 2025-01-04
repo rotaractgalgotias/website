@@ -8,7 +8,7 @@ export const CONTACT_CARDS = [
   },
   {
     icon: Phone,
-    title: "Call Us",
+    title: "Rtr. Divyanshu Khatiyar",
     content: "+91 97945-65358",
   },
   {
@@ -17,9 +17,9 @@ export const CONTACT_CARDS = [
     content: "contact@rotaractgalgotias.org",
   },
   {
-    icon: Clock,
-    title: "Available Hours",
-    content: "Anytime",
+    icon: Phone,
+    title: "Rtr. Areeb Ur Rub",
+    content: "+91 95465-57824",
   },
 ];
 
