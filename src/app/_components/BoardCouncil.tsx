@@ -72,7 +72,7 @@ export default function BoardCouncil({
             </Avatar>
             <h3 className="font-medium">Rtr. {member.name}</h3>
             <p className="text-sm text-muted-foreground">
-              {member.roles[0].position}
+              {member.roles[0].position.replaceAll("_", " ")}
             </p>
           </motion.div>
         ))}
