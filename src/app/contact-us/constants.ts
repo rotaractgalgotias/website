@@ -1,4 +1,4 @@
-import { MapPin, Mail, Phone, Clock } from "lucide-react";
+import { MapPin, Mail, Phone } from "lucide-react";
 
 export const CONTACT_CARDS = [
   {
