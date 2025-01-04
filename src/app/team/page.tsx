@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import MaxWidthWrapper from "@/components/wrappers/MaxWidthWrapper";
 import { prisma } from "@/lib/prisma";
 import { currentYear } from "@/lib/utils";
 import { allPositions } from "@/utils/positions";
@@ -93,7 +94,7 @@ export default async function TeamPage() {
   ];
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 lg:py-16">
+      <MaxWidthWrapper className="py-6 lg:py-12">
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <div>
             <h1 className="text-4xl font-bold mb-4">Team 2024-25</h1>
@@ -205,7 +206,7 @@ export default async function TeamPage() {
             ))}
           </div>
         </div>
-      </div>
+      </MaxWidthWrapper>
     </div>
   );
 }
