@@ -21,6 +21,9 @@ export default async function TeamPage() {
       roles: {
         some: {
           memberType: "COUNCIL",
+          year: {
+            year: currentYear,
+          },
         },
       },
       verified: true,
