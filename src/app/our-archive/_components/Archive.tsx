@@ -46,7 +46,13 @@ export default function OurArchivePage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <Link href={`/our-archive/${tenure.year}`} className="block group">
+            <Link
+              target="_blank"
+              href={`https://${tenure.year}-${
+                (tenure.year + 1) % 100
+              }.rotaractgalgotias.org/`}
+              className="block group"
+            >
               <div className="relative overflow-hidden rounded-lg shadow-lg">
                 <div className="relative h-64 w-full">
                   <Image
