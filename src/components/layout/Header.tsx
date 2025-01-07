@@ -16,6 +16,7 @@ const NAV_LINKS = [
   "Team",
   "Events",
   "Our Archive",
+  "Contact Us",
   "Sponsor Us",
 ];
 

@@ -36,6 +36,7 @@ model Event {
   peopleImpacted     Int?      // Number of people impacted by the event
   duration           Int?      // Duration of the event in hours
   coverImage         String
+  featured           Boolean   @default(false)
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 
@@ -71,9 +72,31 @@ model Member {
   imageUrl  String       // URL to the member's profile image
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
+  collegeId String       @default("cm3lmrtyx0000xz75u4u9jg35")
+  college   College      @relation(fields: [collegeId], references: [id])
+  verified  Boolean      @default(false)
+
+  // New fields to store the member's details
+  email     String?
+  phone     String?
+  year      String?          // Year the member joined the club
+  branch    String?       // Branch of study
+  whatsappNumber String? // WhatsApp number
+  referralSource String? // How the member heard about the club
+  membershipType String?
   
   // New field to relate to the historical roles
   roles      MemberRole[]
+}
+
+model College {
+  id        String    @id @default(cuid())
+  name      String
+  whatsappGroupLink String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  members    Member[]
 }
 
 model MemberRole {

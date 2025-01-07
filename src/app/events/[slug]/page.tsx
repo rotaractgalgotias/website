@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { CalendarIcon, MapPinIcon, UsersIcon, ClockIcon } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { currentYear } from "@/lib/utils";
+import { cn, currentYear } from "@/lib/utils";
 import { Metadata } from "next";
 
 type Props = {
@@ -129,7 +129,15 @@ export default async function page({
                 <span className="block font-medium text-muted-foreground">
                   Volunteers
                 </span>
-                <span>{event.numberOfVolunteers}</span>
+                <span
+                  className={cn({
+                    "ml-1": event.numberOfVolunteers === 0,
+                  })}
+                >
+                  {event.numberOfVolunteers === 0
+                    ? "---"
+                    : event.numberOfVolunteers}
+                </span>
               </div>
             </div>
             <div className="flex items-center justify-center w-fit">
@@ -138,7 +146,13 @@ export default async function page({
                 <span className="block font-medium text-muted-foreground">
                   Duration
                 </span>
-                <span>{event.duration} hours</span>
+                <span
+                  className={cn({
+                    "ml-1": event.duration === 0,
+                  })}
+                >
+                  {event.duration === 0 ? "---" : `${event.duration} hours`}
+                </span>
               </div>
             </div>
           </div>

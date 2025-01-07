@@ -31,6 +31,7 @@ export default async function Home() {
       }
     }
   });
+
   // Sort members by their position and type
   const sortedMembers = members.sort((a, b) => {
     const order = ["COUNCIL", "DIRECTOR", "COORDINATOR", "MEMBER"];

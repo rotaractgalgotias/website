@@ -3,6 +3,9 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import LayoutProvider from "@/components/providers/LayoutProvider";
+import { Suspense } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,7 +29,7 @@ export const metadata: Metadata = {
       "At Rotaract Galgotias, we function as a service-oriented organization that strives to create a better world through volunteerism, community service, and professional development. We are a part of the global network of Rotaract clubs sponsored by Rotary International, which gives us access to a wealth of resources and opportunities for growth.",
     images: [
       {
-        url: "https://rotaractgalgotias.org/og.png",
+        url: "https://rotaractgalgotias.org/logo.png",
       },
     ],
     url: "https://rotaractgalgotias.org/",
@@ -34,7 +37,21 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-  keywords: [],
+  manifest: "/manifest.json",
+  keywords: [
+    "Rotaract",
+    "Rotaract Galgotias",
+    "Rotaract Club",
+    "Galgotias University",
+    "Community Service",
+    "Volunteerism",
+    "Professional Development",
+    "Rotary International",
+    "Student Organization",
+    "Social Impact",
+    "Leadership Development",
+    "Youth Service",
+  ],
   alternates: {
     canonical: "/",
     languages: {
@@ -54,7 +71,19 @@ export default function RootLayout({
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         className={cn(inter.className, "antialiased")}
       >
-        <LayoutProvider>{children}</LayoutProvider>
+        <Suspense>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            forcedTheme="light"
+            disableTransitionOnChange
+          >
+            <LayoutProvider>{children}</LayoutProvider>
+          </ThemeProvider>
+
+          <Toaster />
+        </Suspense>
       </body>
     </html>
   );

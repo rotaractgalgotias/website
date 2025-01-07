@@ -70,9 +70,9 @@ export default function BoardCouncil({
               <AvatarImage src={member.imageUrl} alt={member.name} />
               <AvatarFallback>{member.name.split(" ")[0]}</AvatarFallback>
             </Avatar>
-            <h3 className="font-medium">{member.name}</h3>
+            <h3 className="font-medium">Rtr. {member.name}</h3>
             <p className="text-sm text-muted-foreground">
-              {member.roles[0].position}
+              {member.roles[0].position.replaceAll("_", " ")}
             </p>
           </motion.div>
         ))}

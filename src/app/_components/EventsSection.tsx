@@ -11,6 +11,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const EVENTS_IMAGES = [
   {
@@ -67,17 +68,19 @@ export default function EventsSection() {
               transition={{ type: "spring", stiffness: 300, damping: 10 }}
             >
               <Card>
-                <CardContent className="p-6 space-y-2">
+                <CardContent className="p-6 space-y-2 h-64">
                   <CalendarIcon className="h-8 w-8 text-primary mb-2" />
                   <h3 className="font-semibold">View All Events</h3>
                   <p className="text-sm text-muted-foreground">
                     We organize a variety of events throughout the year. Check
                     out our calendar to see what&apos;s coming up next.
                   </p>
-                  <Button variant="link" className="p-0">
-                    All Events
-                    <ArrowRightIcon className="ml-2 h-4 w-4" />
-                  </Button>
+                  <Link href="/events">
+                    <Button variant="link" className="p-0">
+                      All Events
+                      <ArrowRightIcon className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             </motion.div>
@@ -86,17 +89,19 @@ export default function EventsSection() {
               transition={{ type: "spring", stiffness: 300, damping: 10 }}
             >
               <Card>
-                <CardContent className="p-6 space-y-2">
+                <CardContent className="p-6 space-y-2 h-64">
                   <LightbulbIcon className="h-8 w-8 text-primary mb-2" />
                   <h3 className="font-semibold">Suggest an Event</h3>
                   <p className="text-sm text-muted-foreground">
                     We are always open to new ideas and suggestions. If you have
                     an idea for an event, please let us know.
                   </p>
+                  <Link href={"/contact-us"}>
                   <Button variant="link" className="p-0">
                     Contact us
                     <ArrowRightIcon className="ml-2 h-4 w-4" />
                   </Button>
+                  </Link>
                 </CardContent>
               </Card>
             </motion.div>

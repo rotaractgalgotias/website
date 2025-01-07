@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import MaxWidthWrapper from "@/components/wrappers/MaxWidthWrapper";
 import { prisma } from "@/lib/prisma";
 import { currentYear } from "@/lib/utils";
 import { allPositions } from "@/utils/positions";
@@ -21,8 +22,12 @@ export default async function TeamPage() {
       roles: {
         some: {
           memberType: "COUNCIL",
+          year: {
+            year: currentYear,
+          },
         },
       },
+      verified: true,
     },
     include: {
       roles: {
@@ -38,13 +43,14 @@ export default async function TeamPage() {
   const directorPromise = prisma.member.findMany({
     where: {
       roles: {
-        some: {
+        every: {
           year: {
             year: currentYear,
           },
           memberType: "DIRECTOR",
         },
       },
+      verified: true,
     },
     include: {
       roles: {
@@ -88,7 +94,7 @@ export default async function TeamPage() {
   ];
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 lg:py-16">
+      <MaxWidthWrapper className="py-6 lg:py-12">
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <div>
             <h1 className="text-4xl font-bold mb-4">Team 2024-25</h1>
@@ -152,7 +158,7 @@ export default async function TeamPage() {
           </Card>
         </div>
 
-        <div className="mb-12">
+        <div className="mb-12" id="boardCouncil">
           <h2 className="text-2xl lg:text-3xl font-semibold mb-6">
             Board Council
           </h2>
@@ -168,15 +174,15 @@ export default async function TeamPage() {
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <h3 className="font-medium text-sm">{member.name}</h3>
+                <h3 className="font-medium text-sm">Rtr. {member.name}</h3>
                 <p className="text-xs text-muted-foreground">
-                  {member.roles[0].position}
+                  {member.roles[0].position.replaceAll("_", " ")}
                 </p>
               </div>
             ))}
           </div>
         </div>
-        <div>
+        <div id="boardOfDirectors">
           <h2 className="text-2xl lg:text-3xl font-semibold mb-6">
             Board Of Directors
           </h2>
@@ -192,15 +198,15 @@ export default async function TeamPage() {
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <h3 className="font-medium text-sm">{member.name}</h3>
+                <h3 className="font-medium text-sm">Rtr. {member.name}</h3>
                 <p className="text-xs text-muted-foreground">
-                  {member.roles[0].position}
+                  {member.roles[0].position.replaceAll("_", " ")}
                 </p>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </MaxWidthWrapper>
     </div>
   );
 }

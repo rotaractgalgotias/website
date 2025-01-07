@@ -1,6 +1,6 @@
 {
-  "name": "website-rewrite",
-  "version": "0.1.0",
+  "name": "rotaract-galgotias",
+  "version": "0.9.5",
   "private": true,
   "scripts": {
     "dev": "prisma generate && next dev --turbopack",
@@ -9,12 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.1",
     "@prisma/client": "5.22.0",
     "@radix-ui/react-avatar": "^1.1.1",
+    "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-progress": "^1.1.0",
+    "@radix-ui/react-radio-group": "^1.2.1",
     "@radix-ui/react-separator": "^1.1.0",
+    "@radix-ui/react-slider": "^1.2.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.2",
     "@tailwindcss/typography": "^0.5.15",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -23,13 +29,22 @@
     "lucide-react": "^0.456.0",
     "next": "15.0.3",
     "next-mdx-remote": "^5.0.0",
+    "next-themes": "^0.4.3",
+    "nextjs-toploader": "^3.7.15",
+    "nprogress": "^0.2.0",
+    "nuqs": "^2.2.1",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-hook-form": "^7.53.2",
+    "resend": "^4.0.1",
+    "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/nprogress": "^0.2.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
