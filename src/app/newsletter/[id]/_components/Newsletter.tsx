@@ -27,7 +27,7 @@ export default function Newsletter({
     // Set dimensions based on the current window size
     const updateDimensions = () => {
       setDimensions({
-        width: window.innerWidth > 450 ? 500 : 400,
+        width: window.innerWidth > 450 ? 500 : 350,
         height: window.innerWidth > 450 ? 600 : 500,
       });
     };
