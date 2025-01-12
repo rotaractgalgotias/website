@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/carousel";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Autoplay from "embla-carousel-autoplay"
+
 
 const EVENTS_IMAGES = [
   {
@@ -118,6 +120,11 @@ export default function EventsSection() {
             opts={{
               loop: true,
             }}
+            plugins={[
+              Autoplay({
+                delay: 2000,
+              }),
+            ]}
           >
             <CarouselContent>
               {EVENTS_IMAGES.map((image, index) => (

@@ -194,7 +194,7 @@ export default function AboutUs() {
             transition={{ type: "spring", stiffness: 300 }}
           >
             <Image
-              src="/about_image.jpg"
+              src="/council.jpg"
               alt="Rotaract Club Logo"
               width={400}
               height={400}

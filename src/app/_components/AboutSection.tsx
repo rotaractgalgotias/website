@@ -16,7 +16,7 @@ export default function AboutSection() {
         className="w-full"
       >
         <Image
-          src="/about_image.jpg"
+          src="/about_image1.jpg"
           alt="Community service activity"
           width={600}
           height={400}

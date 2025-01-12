@@ -12,15 +12,16 @@ export default async function Page({ params }: { params: Params }) {
       id,
     },
   });
+  
 
   if (!newsletter) {
     return <div>Newsletter not found</div>;
   }
 
   return (
-    <div className="min-h-screen w-full overflow-hidden bg-background">
-      <MaxWidthWrapper className="py-6 lg:py-12">
-        <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full overflow-hidden bg-background">
+      <MaxWidthWrapper>
+        <div className="w-full h-full flex flex-col justify-center items-center">
           <Newsletter newsletter={newsletter} />
         </div>
       </MaxWidthWrapper>
