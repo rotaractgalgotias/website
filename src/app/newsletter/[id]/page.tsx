@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: Params }) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen w-full overflow-hidden bg-background">
       <MaxWidthWrapper className="py-6 lg:py-12">
         <div className="w-full h-full flex justify-center items-center">
           <Newsletter newsletter={newsletter} />
