@@ -24,6 +24,7 @@
     "@tailwindcss/typography": "^0.5.15",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.3.1",
     "framer-motion": "^11.11.15",
     "lucide-react": "^0.456.0",
