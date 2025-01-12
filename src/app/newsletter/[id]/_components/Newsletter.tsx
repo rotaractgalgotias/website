@@ -4,6 +4,7 @@ import { Newsletter as NewsletterType } from "@prisma/client";
 import React, { useCallback, useEffect, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import Image from "next/image";
+import { Download, Share2 } from "lucide-react";
 
 export default function Newsletter({
   newsletter,
@@ -46,7 +47,19 @@ export default function Newsletter({
     return null;
   }
 
+  
+  const pdfLink = `https://github.com/rotaractgalgotias/images/blob/main/newsletter/${newsletter.month}/RaC%20Galgotias%20Newsletter%20Q1%20Jul-Sept%202024-25.pdf?raw=true`;
 
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: newsletter.title,
+        url: window.location.href,
+      });
+    } else {
+      alert("Share feature is not supported in this browser.");
+    }
+  };
 
 
   return (
@@ -92,22 +105,37 @@ export default function Newsletter({
           </div>
         ))}
       </HTMLFlipBook>
-      <div className="flex justify-center items-center gap-2 mt-4 mb-8">
+      <div className="flex justify-center items-center gap-2 my-4">
         <button
           className=" p-2 bg-gray-800 text-sm text-white rounded-full shadow-md hover:bg-gray-700 transition"
 
-          onClick={() =>
-            {book.current?.pageFlip().flipPrev()
-             
-            }}>Prev</button>
+          onClick={() => {
+            book.current?.pageFlip().flipPrev()
+
+          }}>Prev</button>
         <span className="text-gray-800 text-center">Page {currentPage} of {pages.length}</span>
         <button
           className="p-2 bg-gray-800 text-sm text-white rounded-full shadow-md hover:bg-gray-700 transition"
 
-          onClick={() =>
-            {book.current?.pageFlip().flipNext()
-            }}>Next</button>
+          onClick={() => {
+            book.current?.pageFlip().flipNext()
+          }}>Next</button>
 
+      </div>
+      <div className="flex justify-center items-center gap-4 my-4">
+        <a
+          href={pdfLink}
+          download
+          className="px-4 py-3 flex items-center gap-2 bg-gray-800 text-white rounded-full shadow-md hover:bg-gray-700 transition"
+        >
+          Download <Download size={24} />
+        </a>
+        <button
+          onClick={handleShare}
+          className="px-4 py-3 flex items-center gap-2 bg-gray-800 text-white rounded-full shadow-md hover:bg-gray-700 transition"
+        >
+          Share <Share2 size={24} />
+        </button>
       </div>
     </>
 
