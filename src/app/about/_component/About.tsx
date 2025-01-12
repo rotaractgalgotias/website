@@ -253,7 +253,7 @@ export default function AboutUs() {
             transition={{ type: "spring", stiffness: 300 }}
           >
             <Image
-              src="/about/parent.jpg"
+              src="/about/rotary.jpeg"
               alt="Rotary District Logo"
               width={400}
               height={400}

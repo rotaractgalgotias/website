@@ -27,7 +27,7 @@ export default function Newsletter({
     // Set dimensions based on the current window size
     const updateDimensions = () => {
       setDimensions({
-        width: window.innerWidth > 450 ? 500 : 350,
+        width: window.innerWidth > 450 ? 450 : 350,
         height: window.innerWidth > 450 ? 600 : 500,
       });
     };
@@ -86,6 +86,8 @@ export default function Newsletter({
               quality={100}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              style={{ objectFit: "contain" }}
+
             />
           </div>
         ))}
