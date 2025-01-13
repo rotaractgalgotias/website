@@ -10,7 +10,7 @@ export default async function Page({ params }: { params: Params }) {
   const id = paramsStore.id;
   const newsletter = await prisma.newsletter.findUnique({
     where: {
-      id,
+      slug: id,
     },
   });
   

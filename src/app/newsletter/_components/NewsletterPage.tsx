@@ -47,7 +47,7 @@ export default function Newsletter({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <Link href={`/newsletter/${newsletter.id}`} className="block group">
+            <Link href={`/newsletter/${newsletter.slug}`} className="block group">
               <div className="relative overflow-hidden rounded-lg shadow-lg">
                 <div className="relative h-[400px] w-full">
                   <Image
