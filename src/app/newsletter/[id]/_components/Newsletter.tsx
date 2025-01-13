@@ -109,16 +109,12 @@ export default function Newsletter({
       </HTMLFlipBook>
       <div className="flex justify-center items-center gap-2 my-4">
         <Button
-          // className=" p-2 bg-gray-800 text-sm text-white rounded-full shadow-md hover:bg-gray-700 transition"
-
           onClick={() => {
             book.current?.pageFlip().flipPrev()
 
           }}>Prev</Button>
         <span className="text-gray-800 text-center">Page {currentPage + 1} of {pages.length}</span>
         <Button
-          // className="p-2 bg-gray-800 text-sm text-white rounded-full shadow-md hover:bg-gray-700 transition"
-
           onClick={() => {
             book.current?.pageFlip().flipNext()
           }}>Next</Button>

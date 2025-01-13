@@ -148,7 +148,7 @@ export default async function TeamPage() {
           <Card>
             <CardContent className="p-0">
               <Image
-                src={"/team_23-24.jpg"}
+                src={"/about_image1.jpg"}
                 alt="Rotaract Club Team 2024-25"
                 width={600}
                 height={400}
@@ -162,7 +162,7 @@ export default async function TeamPage() {
           <h2 className="text-2xl lg:text-3xl font-semibold mb-6">
             Board Council
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-10">
             {sortedCouncil.map((member, index) => (
               <div key={index} className="text-center">
                 <Avatar className="size-28 lg:size-32 mx-auto mb-2">

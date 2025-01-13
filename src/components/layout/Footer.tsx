@@ -52,7 +52,6 @@ const socialLinks = [
     icon: Linkedin,
     href: "https://www.linkedin.com/company/rotaract-club-of-galgotias-educational-institutions/",
   },
-  { icon: Threads, href: "https://www.threads.net/@rotaract_galgotias" },
   {
     icon: GithubIcon,
     href: "https://github.com/rotaractgalgotias/website-rewrite",
