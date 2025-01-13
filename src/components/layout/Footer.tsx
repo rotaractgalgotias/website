@@ -29,7 +29,7 @@ const footerLinks = {
     { name: "Past Teams", href: "/our-archive" },
   ],
   documents: [
-    { name: "Newsletters", href: "/" },
+    { name: "Newsletters", href: "/newsletter" },
     { name: "Reports", href: "/" },
     { name: "Club Aggrements", href: "/" },
     { name: "Media Kit", href: "#" },

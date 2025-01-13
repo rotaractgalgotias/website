@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: Params }) {
 
 
   return (
-    <div className="w-full overflow-hidden bg-background">
+    <div className="w-full md:mt-4 mt-0 overflow-hidden bg-background">
       <MaxWidthWrapper>
         <div className="w-full h-full flex flex-col justify-center items-center">
           <Newsletter newsletter={newsletter} />
