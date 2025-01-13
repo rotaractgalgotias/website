@@ -5,6 +5,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import Image from "next/image";
 import { Download, Share2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 export default function Newsletter({
   newsletter,
@@ -47,7 +49,7 @@ export default function Newsletter({
     return null;
   }
 
-  
+
   const pdfLink = `https://github.com/rotaractgalgotias/images/blob/main/newsletter/${newsletter.month}/RaC%20Galgotias%20Newsletter%20Q1%20Jul-Sept%202024-25.pdf?raw=true`;
 
   const handleShare = () => {
@@ -84,12 +86,12 @@ export default function Newsletter({
         startZIndex={0}
         autoSize={true}
         maxShadowOpacity={0}
-        mobileScrollSupport={true}
+        mobileScrollSupport={false}
         clickEventForward={true}
         useMouseEvents={true}
         swipeDistance={0}
         showPageCorners={true}
-        disableFlipByClick={true}
+        disableFlipByClick={false}
       >
         {pages.map((page, index) => (
           <div key={page} >
@@ -106,36 +108,39 @@ export default function Newsletter({
         ))}
       </HTMLFlipBook>
       <div className="flex justify-center items-center gap-2 my-4">
-        <button
-          className=" p-2 bg-gray-800 text-sm text-white rounded-full shadow-md hover:bg-gray-700 transition"
+        <Button
+          // className=" p-2 bg-gray-800 text-sm text-white rounded-full shadow-md hover:bg-gray-700 transition"
 
           onClick={() => {
             book.current?.pageFlip().flipPrev()
 
-          }}>Prev</button>
-        <span className="text-gray-800 text-center">Page {currentPage} of {pages.length}</span>
-        <button
-          className="p-2 bg-gray-800 text-sm text-white rounded-full shadow-md hover:bg-gray-700 transition"
+          }}>Prev</Button>
+        <span className="text-gray-800 text-center">Page {currentPage + 1} of {pages.length}</span>
+        <Button
+          // className="p-2 bg-gray-800 text-sm text-white rounded-full shadow-md hover:bg-gray-700 transition"
 
           onClick={() => {
             book.current?.pageFlip().flipNext()
-          }}>Next</button>
+          }}>Next</Button>
 
       </div>
+      <Separator />
       <div className="flex justify-center items-center gap-4 my-4">
-        <a
-          href={pdfLink}
-          download
-          className="px-4 py-3 flex items-center gap-2 bg-gray-800 text-white rounded-full shadow-md hover:bg-gray-700 transition"
-        >
-          Download <Download size={24} />
-        </a>
-        <button
+        <Button >
+          <a
+            href={pdfLink}
+            download
+            className="flex items-center gap-2 justify-center"
+          >
+            Download <Download size={18} />
+          </a>
+        </Button>
+        <Button
           onClick={handleShare}
-          className="px-4 py-3 flex items-center gap-2 bg-gray-800 text-white rounded-full shadow-md hover:bg-gray-700 transition"
+          className="flex items-center gap-2 justify-center"
         >
-          Share <Share2 size={24} />
-        </button>
+          Share <Share2 size={18} />
+        </Button>
       </div>
     </>
 
