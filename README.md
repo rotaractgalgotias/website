@@ -8,6 +8,7 @@ This repository contains the codebase for the Rotaract Galgotias website built w
 - **Prisma ORM**
 - **TypeScript Support**
 - **Rotaract Integration**
+- **Supabase**
 
 ## Setup
 
