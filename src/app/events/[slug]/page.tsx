@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { CalendarIcon, MapPinIcon, UsersIcon, ClockIcon } from "lucide-react";
+import { MapPinIcon, UsersIcon, ClockIcon } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { cn, currentYear } from "@/lib/utils";
 import { Metadata } from "next";
+import { DateDisplay } from "@/components/events/Date";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -105,15 +106,7 @@ export default async function page({
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-8">
         <div className="bg-primary/5 rounded-lg p-4 md:p-6 mb-8 -mt-12 relative z-10 shadow-md">
           <div className="grid grid-cols-2 md:flex md:flex-wrap w-full md:justify-evenly gap-4 text-sm ">
-            <div className="flex items-center justify-center w-fit">
-              <CalendarIcon className="h-5 w-5 text-primary mr-2" />
-              <div>
-                <span className="block font-medium text-muted-foreground">
-                  Date
-                </span>
-                <span>{event.date.toLocaleDateString()}</span>
-              </div>
-            </div>
+            <DateDisplay date={event.date} />
             <div className="flex items-center justify-center w-fit">
               <MapPinIcon className="h-5 w-5 text-primary mr-2" />
               <div>
