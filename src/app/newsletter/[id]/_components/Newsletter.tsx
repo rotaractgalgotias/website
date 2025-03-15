@@ -49,9 +49,6 @@ export default function Newsletter({
     return null;
   }
 
-
-  const pdfLink = `https://github.com/rotaractgalgotias/images/blob/main/newsletter/${newsletter.month}/RaC%20Galgotias%20Newsletter%20Q1%20Jul-Sept%202024-25.pdf?raw=true`;
-
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -122,9 +119,9 @@ export default function Newsletter({
       </div>
       <Separator />
       <div className="flex justify-center items-center gap-4 my-4">
-        <Button >
+        <Button disabled={!newsletter.pdfUrl}>
           <a
-            href={pdfLink}
+            href={newsletter.pdfUrl ?? ""}
             download
             className="flex items-center gap-2 justify-center"
           >
