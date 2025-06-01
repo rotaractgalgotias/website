@@ -6,10 +6,10 @@ import matter from "gray-matter";
 
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  context: any
 ) {
   try {
-    const { slug } = params;
+    const { slug } = context.params;
     const filePath = path.join(process.cwd(), "src/content/domains", `${slug}.mdx`);
     
     // Check if file exists
