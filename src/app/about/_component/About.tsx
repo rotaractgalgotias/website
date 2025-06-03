@@ -75,16 +75,7 @@ export const domains: Domain[] = [
       "Conduct reading circles"
     ]
   },
-  {
-    icon: Laptop,
-    title: "Media Services",
-    description: "Design, create, and manage digital content that represents the club's activities and achievements.",
-    activities: [
-      "Design posters and videos",
-      "Capture club moments",
-      "Manage digital archives"
-    ]
-  },
+  
   {
     icon: UserPlus,
     title: "Club Services",
