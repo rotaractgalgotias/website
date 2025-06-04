@@ -13,7 +13,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
     },
   });
-
   return [
     {
       url: "https://rotaractgalgotias.org/",

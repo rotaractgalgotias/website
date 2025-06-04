@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
-    "@prisma/client": "5.22.0",
+    "@prisma/client": "6.9.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.2",
@@ -27,6 +27,7 @@
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.3.1",
     "framer-motion": "^11.11.15",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.456.0",
     "next": "15.0.3",
     "next-mdx-remote": "^5.0.0",
@@ -52,7 +53,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
-    "prisma": "5.22.0",
+    "prisma": "6.9.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

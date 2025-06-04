@@ -16,151 +16,126 @@ import {
   Wrench,
   UserPlus,
 } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import MaxWidthWrapper from "@/components/wrappers/MaxWidthWrapper";
+import { LucideIcon } from "lucide-react";
+
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
 };
 
-// const stagger = {
-//   visible: { transition: { staggerChildren: 0.2 } },
-// };
+export interface Domain {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  activities: string[];
+}
 
-const domains = [
+export const domains: Domain[] = [
   {
     icon: Users,
     title: "Community Services",
-    description:
-      "Engage in vital community service projects focusing on education, healthcare, and social welfare.",
+    description: "Lead initiatives that make a direct impact in local communities through service and outreach programs.",
     activities: [
-      "Organize blood donation camps",
-      "Conduct health awareness programs",
-      "Support local schools",
-    ],
-  },
-  {
-    icon: UserPlus,
-    title: "Club Services",
-    description:
-      "Contribute to planning events, meetings, and member activities. Develop leadership skills within the club.",
-    activities: [
-      "Organize club meetings",
-      "Plan team-building activities",
-      "Mentor new members",
-    ],
-  },
-  {
-    icon: Briefcase,
-    title: "Vocational Services",
-    description:
-      "Enhance vocational skills through workshops and seminars. Gain insights related to your future profession.",
-    activities: [
-      "Host career guidance sessions",
-      "Arrange industry visits",
-      "Conduct skill development workshops",
-    ],
-  },
-  {
-    icon: BookOpen,
-    title: "Literary Services",
-    description:
-      "Participate in writing contests, poetry readings, and book discussions. Explore and share your passion for words.",
-    activities: [
-      "Organize book clubs",
-      "Host writing workshops",
-      "Conduct poetry slams",
-    ],
+      "Organize cleanliness drives",
+      "Host community health camps",
+      "Distribute essential supplies"
+    ]
   },
   {
     icon: Globe,
     title: "International Services",
-    description:
-      "Engage in global projects, cultural exchanges, and collaborations with Rotaract clubs worldwide.",
+    description: "Foster global understanding through international collaboration and cultural exchange.",
     activities: [
-      "Participate in international conferences",
-      "Organize cultural exchange programs",
-      "Collaborate on global initiatives",
-    ],
-  },
-  {
-    icon: Laptop,
-    title: "Multimedia Services",
-    description:
-      "Contribute to graphic design, video production, and digital media projects. Showcase creativity and technical skills.",
-    activities: [
-      "Create promotional videos",
-      "Design club merchandise",
-      "Develop digital content for social media",
-    ],
+      "Coordinate global Rotaract collaborations",
+      "Promote cultural exchange",
+      "Support international causes"
+    ]
   },
   {
     icon: Share2,
-    title: "Public Relations Services",
-    description:
-      "Shape the club's public image through communication strategies and social media management.",
+    title: "Public Relations",
+    description: "Enhance the club's visibility and reputation through strategic communication and media outreach.",
     activities: [
-      "Manage club's social media presence",
+      "Manage public image",
       "Write press releases",
-      "Coordinate with local media",
-    ],
+      "Handle external communications"
+    ]
   },
   {
-    icon: Camera,
-    title: "Photography Services",
-    description:
-      "Capture moments at events and community projects. Develop photography skills and enhance the club's visual narrative.",
+    icon: BookOpen,
+    title: "Literary Services",
+    description: "Encourage literary expression and intellectual engagement through various activities.",
     activities: [
-      "Document club events",
-      "Create photo essays of projects",
-      "Conduct photography workshops",
-    ],
+      "Host debates and quizzes",
+      "Organize writing competitions",
+      "Conduct reading circles"
+    ]
   },
+  
   {
-    icon: Radio,
-    title: "Social Media",
-    description:
-      "Manage online presence, create content, and run campaigns. Connect with a wider audience.",
+    icon: UserPlus,
+    title: "Club Services",
+    description: "Facilitate smooth internal functioning and foster fellowship within the club.",
     activities: [
-      "Develop social media strategy",
-      "Create engaging content",
-      "Analyze social media metrics",
-    ],
+      "Organize member induction",
+      "Host internal events",
+      "Maintain club harmony"
+    ]
   },
   {
     icon: Users,
     title: "Management Services",
-    description:
-      "Contribute to event planning and execution. Hone organizational and leadership skills.",
+    description: "Oversee planning and implementation of club projects and ensure operational excellence.",
     activities: [
-      "Plan and execute club events",
-      "Manage project timelines",
-      "Coordinate with external partners",
-    ],
+      "Supervise logistics",
+      "Monitor event timelines",
+      "Coordinate with service chairs"
+    ]
+  },
+  {
+    icon: Briefcase,
+    title: "Professional Development",
+    description: "Empower members through career-oriented workshops, seminars, and industry exposure.",
+    activities: [
+      "Host skill-building sessions",
+      "Organize internships and networking",
+      "Conduct mentorship programs"
+    ]
   },
   {
     icon: Mic2,
     title: "Performing Arts",
-    description:
-      "Showcase talents in music, dance, theater, and more. Contribute creatively to cultural events.",
+    description: "Promote creativity through cultural performances and artistic expression.",
     activities: [
-      "Organize talent shows",
-      "Conduct drama workshops",
-      "Perform at community events",
-    ],
+      "Organize dance and music events",
+      "Coordinate talent shows",
+      "Promote art-based outreach"
+    ]
+  },
+  {
+    icon: Radio,
+    title: "Social Media Services",
+    description: "Engage audiences and promote the club's work on social platforms.",
+    activities: [
+      "Create and schedule posts",
+      "Run awareness campaigns",
+      "Analyze social engagement"
+    ]
   },
   {
     icon: Wrench,
     title: "Technical Services",
-    description:
-      "Contribute to web design, content management and maintenance of the Rotaract website.",
+    description: "Support all tech-based operations and ensure smooth event execution with digital tools.",
     activities: [
-      "Maintain club website",
-      "Provide technical support for events",
-      "Develop club management software",
-    ],
-  },
+      "Maintain tech infrastructure",
+      "Provide event tech support",
+      "Develop internal tools"
+    ]
+  }
 ];
 
 export default function AboutUs() {
@@ -287,13 +262,15 @@ export default function AboutUs() {
                       <li key={i}>{activity}</li>
                     ))}
                   </ul>
-                  <Button
-                    variant="link"
-                    className="p-0 h-auto text-primary hover:underline"
-                  >
-                    Learn More
-                    <ArrowRight className="ml-1 h-4 w-4" />
-                  </Button>
+                  <Link href={`/about/domains/${domain.title.toLowerCase().replace(/\s+/g, "-")}`} prefetch>
+                    <Button
+                      variant="link"
+                      className="p-0 h-auto text-primary hover:underline"
+                    >
+                      Learn More
+                      <ArrowRight className="ml-1 h-4 w-4" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
