@@ -65,6 +65,7 @@ model Year {
 
   events  Event[]  // Related events for this year
   roles   MemberRole[] // Related member roles for this year
+  newsletters Newsletter[] // Related newsletters for this year
 }
 
 model Member {
@@ -80,7 +81,7 @@ model Member {
   // New fields to store the member's details
   email     String?
   phone     String?
-  year      String?        // Year the member joined the club
+  year      String?          // Year the member joined the club
   branch    String?       // Branch of study
   whatsappNumber String? // WhatsApp number
   referralSource String? // How the member heard about the club
@@ -126,15 +127,16 @@ enum Position {
   SERGEANT_AT_ARMS
   JOINT_SECRETARY
   TREASURER
+  DIRECTORIAL_COMMITTEE_CHAIR
   PUBLIC_RELATION_OFFICER
   CLUB_SERVICE
   COMMUNITY_SERVICE
   VOCATIONAL_SERVICE
   INTERNATIONAL_SERVICE
   LITERARY_SERVICE
-  MULTIMEDIA_SERVICE
+  MEDIA_SERVICE
   PUBLIC_RELATION_SERVICES
-  PHOTOGRAPHY_SERVICE
+  PROFESSIONAL_DEVELOPMENT
   SOCIAL_MEDIA
   PERFORMING_ARTS_HEAD
   TECHNICAL_SERVICES
@@ -152,4 +154,7 @@ model Newsletter {
   pdfUrl     String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  yearId     String?
+  year       Year?    @relation(fields: [yearId], references: [id], onDelete: Cascade)
 }
