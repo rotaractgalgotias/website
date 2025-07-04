@@ -15,25 +15,18 @@ const footerLinks = {
   about: [
     { name: "Rotaract", href: "https://www.rotary.org/en" },
     { name: "Rotary", href: "https://www.rotary.org/en" },
-    {
-      name: "Rotarct District 3011",
-      href: "https://www.rotaractdistrict3011.org/",
-    },
     { name: "Club History", href: "/our-archive" },
     { name: "Our Events", href: "/events" },
   ],
   team: [
     { name: "Team Page", href: "/team" },
-    { name: "Board Council", href: "/team/#boardcoumcil" },
+    { name: "Board Council", href: "/team/#boardCouncil" },
     { name: "Board of Directors", href: "/team/#boardOfDirectors" },
     { name: "Past Teams", href: "/our-archive" },
   ],
   documents: [
     { name: "Newsletters", href: "/newsletter" },
-    { name: "Reports", href: "/" },
-    { name: "Club Aggrements", href: "/" },
-    { name: "Media Kit", href: "#" },
-    { name: "Press Release", href: "/" },
+    
   ],
 };
 

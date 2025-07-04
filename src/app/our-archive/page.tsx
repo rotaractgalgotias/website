@@ -31,13 +31,23 @@ export default async function page() {
       year: {
         not: currentYear,
       },
+      roles: {
+        some: {
+          position: "PRESIDENT",
+        },
+      },
     },
   });
 
-  // write a function to convert 2024 to 2024-
+  // Filter out years that don't have any PRESIDENT roles with valid members
+  const filteredYears = years.filter((year) => 
+    year.roles.length > 0 && 
+    year.roles[0]?.member?.name
+  );
+
   return (
     <div>
-      <OurArchivePage tenures={years} />
+      <OurArchivePage tenures={filteredYears} />
     </div>
   );
 }
