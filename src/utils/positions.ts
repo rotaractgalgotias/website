@@ -16,13 +16,14 @@ export const directorAndCoordinatorPositions = [
   Position.VOCATIONAL_SERVICE,
   Position.INTERNATIONAL_SERVICE,
   Position.LITERARY_SERVICE,
-  Position.MULTIMEDIA_SERVICE,
+  Position.MEDIA_SERVICE,
   Position.PUBLIC_RELATION_SERVICES,
-  Position.PHOTOGRAPHY_SERVICE,
+  Position.PROFESSIONAL_DEVELOPMENT,
   Position.SOCIAL_MEDIA,
   Position.PERFORMING_ARTS_HEAD,
   Position.TECHNICAL_SERVICES,
   Position.MANAGEMENT_TEAM_HEAD,
+  Position.DIRECTORIAL_COMMITTEE_CHAIR,
 ];
 
 export const allPositions = [
