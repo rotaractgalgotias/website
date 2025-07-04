@@ -88,7 +88,7 @@ export default function JoinForm({
       };
 
       const url = new URL(
-        `https://docs.google.com/forms/d/e/1FAIpQLSdNZFtEsPdc7kkPohz59DgsgzIqIiY1ze488YpgbfcRIEBHFg/viewform`
+        `https://forms.gle/65caavAN7hmgo8SE6`
       );
       const params = new URLSearchParams();
 
