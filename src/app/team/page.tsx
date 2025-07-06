@@ -116,11 +116,12 @@ export default async function TeamPage() {
                       {section.members.slice(0, 7).map((member, index) => (
                         <Avatar
                           key={index}
-                          className="inline-block h-10 w-10 rounded-full ring-2 ring-background"
+                          className="inline-block h-10 w-10 rounded-full ring-2 ring-background object-cover"
                         >
                           <AvatarImage
                             src={member.imageUrl}
                             alt={member.name}
+                            className="object-cover object-center"
                           />
                           <AvatarFallback>
                             {member.name
@@ -164,7 +165,11 @@ export default async function TeamPage() {
             {sortedCouncil.map((member, index) => (
               <div key={index} className="text-center">
                 <Avatar className="size-28 lg:size-32 mx-auto mb-2">
-                  <AvatarImage src={member.imageUrl} alt={member.name} />
+                  <AvatarImage
+                    src={member.imageUrl}
+                    alt={member.name}
+                    className="object-cover object-center"
+                  />
                   <AvatarFallback>
                     {member.name
                       .split(" ")
@@ -188,7 +193,11 @@ export default async function TeamPage() {
             {director.map((member, index) => (
               <div key={index} className="text-center">
                 <Avatar className="size-28 lg:size-32 mx-auto mb-2">
-                  <AvatarImage src={member.imageUrl} alt={member.name} />
+                  <AvatarImage
+                    src={member.imageUrl}
+                    alt={member.name}
+                    className="object-cover object-center"
+                  />
                   <AvatarFallback>
                     {member.name
                       .split(" ")
