@@ -7,6 +7,7 @@ import { allPositions } from "@/utils/positions";
 import { Position } from "@prisma/client";
 import { Metadata } from "next";
 import Image from "next/image";
+import React from "react";
 
 export const metadata: Metadata = {
   title: "Team",
@@ -190,26 +191,39 @@ export default async function TeamPage() {
             Board Of Directors
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10">
-            {director.map((member, index) => (
-              <div key={index} className="text-center">
-                <Avatar className="size-28 lg:size-32 mx-auto mb-2">
-                  <AvatarImage
-                    src={member.imageUrl}
-                    alt={member.name}
-                    className="object-cover object-center"
-                  />
-                  <AvatarFallback>
-                    {member.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </AvatarFallback>
-                </Avatar>
-                <h3 className="font-medium text-sm">Rtr. {member.name}</h3>
-                <p className="text-xs text-muted-foreground">
-                  {member.roles[0].position.replaceAll("_", " ")}
-                </p>
-              </div>
+            {Object.entries(
+              director.reduce((acc, member) => {
+                const position = member.roles[0].position;
+                if (!acc[position]) {
+                  acc[position] = [];
+                }
+                acc[position].push(member);
+                return acc;
+              }, {} as Record<string, typeof director>)
+            ).map(([position, members]) => (
+              <React.Fragment key={position}>
+                {members.map((member, memberIndex) => (
+                  <div key={memberIndex} className="text-center">
+                    <Avatar className="size-28 lg:size-32 mx-auto mb-2">
+                      <AvatarImage
+                        src={member.imageUrl}
+                        alt={member.name}
+                        className="object-cover object-center"
+                      />
+                      <AvatarFallback>
+                        {member.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <h3 className="font-medium text-sm">Rtr. {member.name}</h3>
+                    <p className="text-xs text-muted-foreground">
+                      {member.roles[0].position.replaceAll("_", " ")}
+                    </p>
+                  </div>
+                ))}
+              </React.Fragment>
             ))}
           </div>
         </div>
