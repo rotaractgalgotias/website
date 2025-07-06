@@ -12,7 +12,27 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 export default async function page() {
-  const newslettes = await prisma.newsletter.findMany();
+  const newslettes = await prisma.newsletter.findMany(
+    {
+      where: {
+        year: {
+          year: parseInt(process.env.CURRENT_YEAR!)
+        }
+      }
+    }
+  );
+
+  if (newslettes.length === 0) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center">
+        <h1 className="text-3xl font-bold text-center mb-4">No Newsletters Available</h1>
+        <p className="text-muted-foreground text-center max-w-md">
+          We haven't published any newsletters for the current year yet. 
+          Please check back later for updates.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>

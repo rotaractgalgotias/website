@@ -95,7 +95,7 @@ export default async function TeamPage() {
       <MaxWidthWrapper className="py-6 lg:py-12">
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <div>
-            <h1 className="text-4xl font-bold mb-4">Team 2024-25</h1>
+            <h1 className="text-4xl font-bold mb-4">Team 2025-26</h1>
             <p className="text-muted-foreground mb-6">
               Rotaract Galgotias follows a hierarchical system where the college
               year determines the roles and responsibilities of its members. The
@@ -161,7 +161,7 @@ export default async function TeamPage() {
           <h2 className="text-2xl lg:text-3xl font-semibold mb-6">
             Board Council
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-10">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10">
             {sortedCouncil.map((member, index) => (
               <div key={index} className="text-center">
                 <Avatar className="size-28 lg:size-32 mx-auto mb-2">

@@ -50,13 +50,13 @@ export default function BoardCouncil({
         transition={{ duration: 0.5 }}
         className="text-3xl font-bold text-center mb-12"
       >
-        Board Council 2024-25
+        Board Council 2025-26
       </motion.h1>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-8 mb-12"
+        className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-12"
       >
         {councilMembers.map((member, index) => (
           <motion.div
@@ -67,7 +67,11 @@ export default function BoardCouncil({
             className="flex flex-col items-center text-center"
           >
             <Avatar className="w-32 h-32 mb-4">
-              <AvatarImage src={member.imageUrl} alt={member.name} />
+              <AvatarImage
+                src={member.imageUrl}
+                alt={member.name}
+                className="object-cover object-center"
+              />
               <AvatarFallback>{member.name.split(" ")[0]}</AvatarFallback>
             </Avatar>
             <h3 className="font-medium">Rtr. {member.name}</h3>
