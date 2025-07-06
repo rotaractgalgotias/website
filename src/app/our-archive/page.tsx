@@ -39,11 +39,15 @@ export default async function page() {
     },
   });
 
+  console.log(years);
+
   // Filter out years that don't have any PRESIDENT roles with valid members
   const filteredYears = years.filter((year) => 
     year.roles.length > 0 && 
     year.roles[0]?.member?.name
   );
+
+  console.log("filtered years", filteredYears);
 
   return (
     <div>
