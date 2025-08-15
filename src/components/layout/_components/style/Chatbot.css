@@ -1,0 +1,25 @@
+.chatbot-container {
+  overflow: hidden;
+}
+
+.chatbot-container a {
+  color: #2700ff;
+}
+
+.chatbot-initiator img {
+  animation: 2s upd infinite;
+  cursor: pointer;
+  position: relative;
+  top: -20px;
+}
+
+@keyframes upd {
+  0%,
+  100% {
+    top: -10px;
+  }
+
+  50% {
+    top: 10px;
+  }
+}

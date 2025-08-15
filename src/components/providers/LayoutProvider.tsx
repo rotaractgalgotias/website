@@ -7,6 +7,7 @@ import Header from "../layout/Header";
 import Footer from "../layout/Footer";
 import ScrollToTop from "../layout/ScrollToTop";
 import TopLoader from "../loaders/TopLoader";
+import Chatbot from "../layout/Chatbot";
 
 export default function LayoutProvider({
   children,
@@ -21,11 +22,12 @@ export default function LayoutProvider({
 
   return (
     <div className="min-h-dvh flex flex-col relative">
-      <ScrollToTop />
+      {/* <ScrollToTop /> */}
       <TopLoader />
       <TopHeader />
       <Header />
       <div className="flex-1">{children}</div>
+      <Chatbot />
       <Footer />
     </div>
   );
