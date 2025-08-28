@@ -86,9 +86,7 @@ export default function Chatbot() {
               alt="Chatbot"
               className="w-10 h-10 rounded-full shadow-md"
             />
-            <span className="font-semibold text-lg tracking-wide">
-              RTR_GEI BOT
-            </span>
+            <span className="font-semibold text-lg tracking-wide">ROTABOT</span>
             <button
               className="ml-auto text-xl hover:scale-125 transition-transform"
               onClick={() => setMinimize(true)}
@@ -141,6 +139,12 @@ export default function Chatbot() {
               placeholder="Type your message..."
               rows={1}
               ref={userInput}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendBotQuery();
+                }
+              }}
             />
             <button
               className="bg-primary text-primary-foreground px-4 py-2 rounded-xl shadow-sm 
