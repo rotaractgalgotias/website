@@ -1,12 +1,12 @@
-.chatbot-container {
+.rac_chatbot {
   overflow: hidden;
 }
 
-.chatbot-container a {
+.rac_chatbot a {
   color: #2700ff;
 }
 
-.chatbot-initiator img {
+.rac_chatbot .chatbot_icon {
   animation: 2s upd infinite;
   cursor: pointer;
   position: relative;
@@ -16,10 +16,10 @@
 @keyframes upd {
   0%,
   100% {
-    top: -10px;
+    top: -5px;
   }
 
   50% {
-    top: 10px;
+    top: 5px;
   }
 }

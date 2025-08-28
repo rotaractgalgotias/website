@@ -33,9 +33,9 @@ This repository contains the codebase for the Rotaract Galgotias website built w
 
    ```env
    DATABASE_URL="your db url"
-   CURRENT_YEAR=2024
+   CURRENT_YEAR="Current Year"
    ROTARACT_API_KEY="your rotaract api key"
-   GEMINI_API_KEY="AjdgJYIYIEJB8708JDGHUGVJHBhgj"
+   GEMINI_API_KEY="Your GEMINI API Key"
    ```
 
 4. **Run Prisma migrations**

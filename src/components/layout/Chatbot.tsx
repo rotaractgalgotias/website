@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import "./_components/style/Chatbot.css";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import AiLoad from "./_components/AiLoad";
 
 export default function Chatbot() {
@@ -13,14 +12,12 @@ export default function Chatbot() {
 
   const handleSend = async (prompt: string) => {
     if (!prompt.trim()) return null;
-
     try {
       const res = await fetch("/api/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt, lastResponse: response }),
       });
-
       const data = await res.json();
       setResponse(data.text);
       return data.text;
@@ -31,10 +28,10 @@ export default function Chatbot() {
 
   const userInput = useRef<HTMLTextAreaElement>(null);
   const messageContainer = useRef<HTMLDivElement>(null);
+
   const handleSendBotQuery = async () => {
     const userinput = userInput.current?.value;
     if (!userinput || loading) return;
-
     setLoading(true);
 
     setChat((prev) => [...prev, { from: "user", message: userinput }]);
@@ -44,7 +41,6 @@ export default function Chatbot() {
       const data = await handleSend(userinput);
       const botMessage =
         typeof data === "string" ? data : "Sorry, I didn't understand.";
-
       setChat((prev) => [...prev, { from: "bot", message: botMessage }]);
     } catch (err) {
       setChat((prev) => [
@@ -64,42 +60,46 @@ export default function Chatbot() {
   }, [chats]);
 
   return (
-    <div>
+    <div className="rac_chatbot">
       {minimize ? (
         <div
-          className="fixed bottom-4 right-4 chatbot-initiator"
-          onClick={() => {
-            setMinimize(false);
-          }}
+          className="fixed bottom-4 right-4 flex items-center justify-center text-primary-foreground 
+                     shadow-lg rounded-full p-3 cursor-pointer hover:scale-105 transition-transform"
+          onClick={() => setMinimize(false)}
         >
-          <img width={100} src="chatbot.png" />
+          <img
+            width={60}
+            src="/chatbot.png"
+            alt="Chatbot"
+            className="chatbot_icon"
+          />
         </div>
       ) : (
         <div
-          className="fixed bottom-0 right-0 sm:right-4 sm:bottom-4 bg-white shadow-lg flex flex-col 
-                    w-full h-[600px] sm:w-[400px] border rounded-none sm:rounded-lg chatbot-container"
+          className="fixed bottom-0 right-0 sm:right-4 sm:bottom-4 bg-card text-card-foreground shadow-xl 
+                     flex flex-col w-full h-[600px] sm:w-[400px] border border-border rounded-none sm:rounded-2xl overflow-hidden"
         >
           {/* Header */}
-          <div className="flex items-center gap-3 bg-blue-600 text-white p-3 relative">
+          <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative">
             <img
               src="/chatbot.png"
               alt="Chatbot"
-              className="w-10 h-10 rounded-full"
+              className="w-10 h-10 rounded-full shadow-md"
             />
-            <span className="font-semibold">RTR_GEI BOT</span>
+            <span className="font-semibold text-lg tracking-wide">
+              RTR_GEI BOT
+            </span>
             <button
-              className="text-white ml-auto"
-              onClick={() => {
-                setMinimize(true);
-              }}
+              className="ml-auto text-xl hover:scale-125 transition-transform"
+              onClick={() => setMinimize(true)}
             >
               ×
             </button>
           </div>
 
-          {/* Messages Area */}
+          {/* Messages */}
           <div
-            className="flex-1 overflow-y-auto p-3 space-y-3 bg-gray-50"
+            className="flex-1 overflow-y-auto p-3 space-y-3 bg-muted/30 backdrop-blur-sm"
             ref={messageContainer}
           >
             {chats.map((chat, key) => {
@@ -112,40 +112,39 @@ export default function Chatbot() {
                   className={`flex ${chat.from === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`px-4 py-2 rounded-lg max-w-xs ${
-                      chat.from === "user"
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200 text-gray-800"
-                    }`}
+                    className={`px-4 py-2 rounded-2xl shadow-sm max-w-[75%] text-sm animate-fadeIn 
+                      ${
+                        chat.from === "user"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
+                      }`}
                   >
                     <div dangerouslySetInnerHTML={{ __html: cleanMessage }} />
                   </div>
                 </div>
               );
             })}
-            {loading ? (
-              <div className={`flex justify-start`}>
-                <div
-                  className={`px-4 py-2 rounded-lg max-w-xs bg-gray-200 text-gray-800`}
-                >
+            {loading && (
+              <div className="flex justify-start">
+                <div className="px-4 py-2 rounded-2xl bg-muted text-muted-foreground shadow-sm">
                   <AiLoad />
                 </div>
               </div>
-            ) : (
-              ""
             )}
           </div>
 
           {/* Footer */}
-          <div className="flex items-center gap-2 p-3 border-t">
+          <div className="flex items-center gap-2 p-3 border-t border-border bg-background">
             <textarea
-              className="flex-1 border rounded p-2 text-sm resize-none focus:outline-none"
+              className="flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
+                         focus:ring-primary focus:outline-none transition"
               placeholder="Type your message..."
               rows={1}
               ref={userInput}
             />
             <button
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="bg-primary text-primary-foreground px-4 py-2 rounded-xl shadow-sm 
+                         hover:bg-primary/90 transition"
               onClick={handleSendBotQuery}
             >
               Send
