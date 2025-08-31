@@ -26,6 +26,17 @@ export default function Chatbot() {
     }
   };
 
+  useEffect(() => {
+    if (minimize) {
+      document.body.style.overflow = "";
+    } else {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [minimize]);
+
   const userInput = useRef<HTMLTextAreaElement>(null);
   const messageContainer = useRef<HTMLDivElement>(null);
 
@@ -60,10 +71,10 @@ export default function Chatbot() {
   }, [chats]);
 
   return (
-    <div className="rac_chatbot">
+    <div className="rac_chatbot z-50">
       {minimize ? (
         <div
-          className="fixed bottom-4 right-4 flex items-center justify-center text-primary-foreground 
+          className="fixed z-50 bottom-4 right-4 flex items-center justify-center text-primary-foreground 
                      shadow-lg rounded-full p-3 cursor-pointer hover:scale-105 transition-transform"
           onClick={() => setMinimize(false)}
         >
@@ -77,7 +88,7 @@ export default function Chatbot() {
       ) : (
         <div
           className="fixed bottom-0 right-0 sm:right-4 sm:bottom-4 bg-card text-card-foreground shadow-xl 
-                     flex flex-col w-full h-[600px] sm:w-[400px] border border-border rounded-none sm:rounded-2xl overflow-hidden"
+                     flex flex-col w-full h-full sm:h-[600px] sm:w-[400px] border border-border rounded-none sm:rounded-2xl overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative">

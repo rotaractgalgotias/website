@@ -31,7 +31,7 @@ export default function DomainPage() {
   const slug = params.slug as string;
   const [mdxContent, setMdxContent] = useState<DomainContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Find the domain that matches the slug
   const domain = domains.find(
     (d: Domain) => d.title.toLowerCase().replace(/\s+/g, "-") === slug
@@ -61,7 +61,9 @@ export default function DomainPage() {
       <MaxWidthWrapper className="py-8">
         <Card>
           <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">Domain not found</p>
+            <p className="text-center text-muted-foreground">
+              Domain not found
+            </p>
             <div className="mt-4 text-center">
               <Link href="/about">
                 <Button variant="outline">
@@ -87,15 +89,6 @@ export default function DomainPage() {
           variants={fadeIn}
           className="space-y-8"
         >
-          <div className="flex justify-between items-center">
-            <Link href="/about">
-              <Button variant="outline">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to About
-              </Button>
-            </Link>
-          </div>
-
           <Card className="border-none bg-background/50 shadow-none">
             <CardHeader className="flex flex-row items-center space-x-4">
               <div className="p-3 rounded-full bg-primary/10 text-primary">
@@ -122,7 +115,10 @@ export default function DomainPage() {
                     )}
                     {mdxContent.frontmatter.date && (
                       <p className="text-sm text-muted-foreground">
-                        Last updated: {new Date(mdxContent.frontmatter.date).toLocaleDateString()}
+                        Last updated:{" "}
+                        {new Date(
+                          mdxContent.frontmatter.date
+                        ).toLocaleDateString()}
                       </p>
                     )}
                   </div>
@@ -136,19 +132,21 @@ export default function DomainPage() {
                   <p className="text-lg text-muted-foreground">
                     {domain.description}
                   </p>
-                  
+
                   <div className="space-y-4">
                     <h3 className="text-xl font-semibold">Key Activities</h3>
                     <ul className="space-y-2">
-                      {domain.activities.map((activity: string, index: number) => (
-                        <li
-                          key={index}
-                          className="flex items-start space-x-2 text-muted-foreground"
-                        >
-                          <span className="text-primary">•</span>
-                          <span>{activity}</span>
-                        </li>
-                      ))}
+                      {domain.activities.map(
+                        (activity: string, index: number) => (
+                          <li
+                            key={index}
+                            className="flex items-start space-x-2 text-muted-foreground"
+                          >
+                            <span className="text-primary">•</span>
+                            <span>{activity}</span>
+                          </li>
+                        )
+                      )}
                     </ul>
                   </div>
                 </>
@@ -159,4 +157,4 @@ export default function DomainPage() {
       </MaxWidthWrapper>
     </div>
   );
-} 
+}
