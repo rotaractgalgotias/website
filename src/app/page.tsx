@@ -27,9 +27,9 @@ export default async function Home() {
           year: {
             year: currentYear,
           },
-        }
-      }
-    }
+        },
+      },
+    },
   });
 
   // Sort members by their position and type
@@ -52,6 +52,7 @@ export default async function Home() {
 
     return 0;
   });
+
   return (
     <main className="min-h-dvh w-full space-y-8 lg:space-y-16 py-8 lg:py-16">
       <div>

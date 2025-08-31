@@ -1,0 +1,26 @@
+.rac_chatbot {
+  overflow: hidden;
+}
+
+.rac_chatbot a {
+  color: #8e6550;
+  font-weight: 700;
+}
+
+.rac_chatbot .chatbot_icon {
+  animation: 2s upd infinite;
+  cursor: pointer;
+  position: relative;
+  top: -20px;
+}
+
+@keyframes upd {
+  0%,
+  100% {
+    top: -5px;
+  }
+
+  50% {
+    top: 5px;
+  }
+}
