@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import "./_components/style/Chatbot.css";
 import AiLoad from "./_components/AiLoad";
+import { LaptopMinimal } from "lucide-react";
 
 export default function Chatbot() {
-  const [chats, setChat] = useState([
-    { from: "bot", message: "Hello! How can I help you?" },
-  ]);
+  const [chats, setChat] = useState([]);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [minimize, setMinimize] = useState(true);
@@ -25,6 +24,43 @@ export default function Chatbot() {
       throw new Error(err.message || "Failed to get Gemini response");
     }
   };
+
+  const [height, setHeight] = useState<number>(0);
+  const [width, setWidth] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Run only on client
+    const logViewportHeight = () => {
+      const newHeight = window.visualViewport
+        ? window.visualViewport.height
+        : window.innerHeight;
+      const newWidth = window.visualViewport
+        ? window.visualViewport.width
+        : window.innerWidth;
+      setHeight(newHeight);
+      setWidth(newWidth);
+    };
+
+    // Initial height set
+    logViewportHeight();
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", logViewportHeight);
+      return () => {
+        window.visualViewport.removeEventListener("resize", logViewportHeight);
+      };
+    } else {
+      window.addEventListener("resize", logViewportHeight);
+      return () => {
+        window.removeEventListener("resize", logViewportHeight);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(height);
+  }, [height]);
 
   useEffect(() => {
     if (minimize) {
@@ -74,21 +110,31 @@ export default function Chatbot() {
     <div className="rac_chatbot z-50">
       {minimize ? (
         <div
-          className="fixed z-50 bottom-4 right-4 flex items-center justify-center text-primary-foreground 
-                     shadow-lg rounded-full p-3 cursor-pointer hover:scale-105 transition-transform"
+          className="fixed z-50 bottom-4 right-4 flex items-center gap-2 justify-center bg-primary text-white 
+             shadow-lg rounded-full p-3 cursor-pointer hover:scale-105 transition-transform chatbot-button animate-pulse"
           onClick={() => setMinimize(false)}
+          role="button"
+          aria-label="Open chatbot"
+          title="Need help? Chat with us!"
         >
           <img
-            width={60}
+            width={40}
             src="/chatbot.png"
-            alt="Chatbot"
+            alt="Chatbot Icon"
             className="chatbot_icon"
           />
+          <span className="hidden md:inline text-sm font-medium">
+            Chat with us
+          </span>
         </div>
       ) : (
         <div
-          className="fixed bottom-0 right-0 sm:right-4 sm:bottom-4 bg-card text-card-foreground shadow-xl 
-                     flex flex-col w-full h-full sm:h-[600px] sm:w-[400px] border border-border rounded-none sm:rounded-2xl overflow-hidden"
+          className={`fixed ${height < 500 ? "top-0" : "bottom-0"} right-0 sm:right-4 sm:bottom-4 bg-card text-card-foreground shadow-xl 
+             flex flex-col w-full sm:h-[600px] sm:w-[400px] border border-border rounded-none sm:rounded-2xl overflow-hidden`}
+          style={{
+            height:
+              width < 640 ? (height < 600 ? `${height}px` : "100%") : "600px",
+          }}
         >
           {/* Header */}
           <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative">
@@ -137,6 +183,19 @@ export default function Chatbot() {
               <div className="flex justify-start">
                 <div className="px-4 py-2 rounded-2xl bg-muted text-muted-foreground shadow-sm">
                   <AiLoad />
+                </div>
+              </div>
+            )}
+            {chats.length === 0 && (
+              <div className="flex w-full h-full items-center justify-center">
+                <div className="text-center px-6 sm:px-10 py-8">
+                  <div className="flex justify-center mb-6">
+                    <LaptopMinimal className="w-12 h-12 text-primary" />
+                  </div>
+                  <p className="text-base text-muted-foreground">
+                    I’m your friendly guide 🤝 <br />
+                    Feel free to ask me anything 🎉
+                  </p>
                 </div>
               </div>
             )}
