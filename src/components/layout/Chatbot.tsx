@@ -3,8 +3,13 @@ import "./_components/style/Chatbot.css";
 import AiLoad from "./_components/AiLoad";
 import { LaptopMinimal } from "lucide-react";
 
+type ChatMessage = {
+  from: "user" | "bot";
+  message: string;
+};
+
 export default function Chatbot() {
-  const [chats, setChat] = useState([]);
+  const [chats, setChat] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [minimize, setMinimize] = useState(true);
