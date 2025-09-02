@@ -116,7 +116,7 @@ export default function Chatbot() {
       {minimize ? (
         <div
           className="fixed z-50 bottom-4 right-4 flex items-center gap-2 justify-center bg-primary text-white 
-             shadow-lg rounded-full p-3 cursor-pointer hover:scale-105 transition-transform chatbot-button animate-pulse"
+             shadow-lg rounded-full p-3 cursor-pointer hover:scale-105 chatbot-button transition-transform"
           onClick={() => setMinimize(false)}
           role="button"
           aria-label="Open chatbot"
@@ -128,9 +128,14 @@ export default function Chatbot() {
             alt="Chatbot Icon"
             className="chatbot_icon"
           />
-          <span className="hidden md:inline text-sm font-medium">
-            Chat with us
-          </span>
+          <div className="flex h-full justify-center items-center">
+            <div className="text-center">
+              <p className="text-[#ffffffcc] hidden md:inline text-sm font-medium">
+                Confused?
+              </p>
+              <p className="text-[#ffffff99] text-[12px]">Chat with Rotabot</p>
+            </div>
+          </div>
         </div>
       ) : (
         <div
