@@ -128,11 +128,9 @@ export default function Chatbot() {
             alt="Chatbot Icon"
             className="chatbot_icon"
           />
-          <div className="flex h-full justify-center items-center">
+          <div className="hidden md:flex h-full justify-center items-center">
             <div className="text-center">
-              <p className="text-[#ffffffcc] hidden md:inline text-sm font-medium">
-                Confused?
-              </p>
+              <p className="text-[#ffffffcc] text-sm font-medium">Confused?</p>
               <p className="text-[#ffffff99] text-[12px]">Chat with Rotabot</p>
             </div>
           </div>
