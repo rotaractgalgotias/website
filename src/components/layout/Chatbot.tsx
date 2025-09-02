@@ -48,7 +48,7 @@ export default function Chatbot() {
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", logViewportHeight);
       return () => {
-        window.visualViewport.removeEventListener("resize", logViewportHeight);
+        window.visualViewport?.removeEventListener("resize", logViewportHeight);
       };
     } else {
       window.addEventListener("resize", logViewportHeight);
@@ -190,7 +190,7 @@ export default function Chatbot() {
               <div className="flex w-full h-full items-center justify-center">
                 <div className="text-center px-6 sm:px-10 py-8">
                   <div className="flex justify-center mb-6">
-                    <LaptopMinimal className="w-12 h-12 text-primary" />
+                    <LaptopMinimal className="w-12 h-12 text-[#00000040]" />
                   </div>
                   <p className="text-base text-muted-foreground">
                     I’m your friendly guide 🤝 <br />
