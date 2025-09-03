@@ -46,6 +46,16 @@ export default function Chatbot() {
     
     if (!isMobile) return;
 
+    // Ensure proper viewport setup for mobile
+    let viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (!viewportMeta) {
+      viewportMeta = document.createElement('meta');
+      viewportMeta.setAttribute('name', 'viewport');
+      document.head.appendChild(viewportMeta);
+    }
+    const originalViewport = viewportMeta.getAttribute('content');
+    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+
     let initialViewportHeight = window.innerHeight;
     let currentViewportHeight = window.innerHeight;
 
@@ -68,17 +78,50 @@ export default function Chatbot() {
         
         setIsKeyboardOpen(keyboardOpen);
         setKeyboardHeight(keyboardOpen ? heightDiff : 0);
+        
+        // Force reflow to prevent layout issues
+        if (keyboardOpen) {
+          document.body.style.height = `${window.visualViewport!.height}px`;
+        } else {
+          document.body.style.height = "100%";
+        }
       };
 
       window.visualViewport.addEventListener('resize', handleVisualViewportChange);
       return () => {
         window.visualViewport?.removeEventListener('resize', handleVisualViewportChange);
+        // Restore original viewport
+        if (originalViewport && viewportMeta) {
+          viewportMeta.setAttribute('content', originalViewport);
+        }
+        document.body.style.height = "";
       };
     } else {
       // Fallback for older browsers
-      window.addEventListener('resize', handleViewportChange);
+      const handleViewportChangeImproved = () => {
+        const currentHeight = window.innerHeight;
+        const heightDiff = initialViewportHeight - currentHeight;
+        const keyboardOpen = heightDiff > 150;
+        
+        setIsKeyboardOpen(keyboardOpen);
+        setKeyboardHeight(keyboardOpen ? heightDiff : 0);
+        
+        // Update body height for proper backdrop coverage
+        if (keyboardOpen) {
+          document.body.style.height = `${currentHeight}px`;
+        } else {
+          document.body.style.height = "100%";
+        }
+      };
+
+      window.addEventListener('resize', handleViewportChangeImproved);
       return () => {
-        window.removeEventListener('resize', handleViewportChange);
+        window.removeEventListener('resize', handleViewportChangeImproved);
+        // Restore original viewport
+        if (originalViewport && viewportMeta) {
+          viewportMeta.setAttribute('content', originalViewport);
+        }
+        document.body.style.height = "";
       };
     }
   }, []);
@@ -86,11 +129,21 @@ export default function Chatbot() {
   useEffect(() => {
     if (!minimize) {
       document.body.style.overflow = "hidden";
+      // Prevent scrolling issues on mobile
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+      document.body.style.height = "100%";
     } else {
       document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
     }
     return () => {
       document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
     };
   }, [minimize]);
 
@@ -165,17 +218,27 @@ export default function Chatbot() {
           </div>
         </div>
       ) : (
-        <div
-          className={`fixed inset-0 sm:inset-auto sm:bottom-4 sm:right-4 sm:w-[400px] 
-                      bg-card text-card-foreground shadow-xl flex flex-col border border-border 
-                      rounded-none sm:rounded-2xl overflow-hidden h-[100dvh] sm:h-[600px]`}
-          style={{
-            // Adjust height on mobile when keyboard is open
-            height: isKeyboardOpen 
-              ? `calc(100dvh - ${keyboardHeight}px)` 
-              : typeof window !== 'undefined' && window.innerWidth >= 640 ? '600px' : '100dvh'
-          }}
-        >
+        <>
+          {/* Mobile backdrop to prevent main page showing through */}
+          <div 
+            className="fixed inset-0 bg-card z-40 sm:hidden"
+            style={{
+              top: isKeyboardOpen ? `${keyboardHeight}px` : '0',
+              backgroundColor: 'var(--card, #ffffff)',
+            }}
+          />
+          
+          <div
+            className={`fixed inset-0 sm:inset-auto sm:bottom-4 sm:right-4 sm:w-[400px] 
+                        bg-card text-card-foreground shadow-xl flex flex-col border-0 sm:border border-border 
+                        rounded-none sm:rounded-2xl overflow-hidden z-50`}
+            style={{
+              // Proper mobile positioning
+              height: typeof window !== 'undefined' && window.innerWidth < 640 
+                ? (isKeyboardOpen ? `calc(100vh - ${keyboardHeight}px)` : '100vh')
+                : '600px',
+            }}
+          >
           {/* Header */}
           <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative">
             <img
@@ -194,11 +257,13 @@ export default function Chatbot() {
 
           {/* Messages */}
           <div
-            className="flex-1 overflow-y-auto p-3 space-y-3 bg-muted/30 backdrop-blur-sm"
+            className="flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-3 bg-muted/30 backdrop-blur-sm"
             ref={messageContainer}
             style={{
               // Ensure messages don't get cut off by keyboard
-              paddingBottom: isKeyboardOpen ? '20px' : '12px'
+              paddingBottom: isKeyboardOpen ? '20px' : '12px',
+              minHeight: 0, // Allows flex child to shrink
+              maxHeight: '100%', // Prevent overflow issues
             }}
           >
             {chats.map((chat, key) => {
@@ -289,7 +354,8 @@ export default function Chatbot() {
               Send
             </button>
           </div>
-        </div>
+          </div>
+        </>
       )}
     </div>
   );
