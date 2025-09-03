@@ -139,7 +139,8 @@ export default function Chatbot() {
                       bg-card text-card-foreground shadow-xl flex flex-col border-0 sm:border border-border 
                       rounded-none sm:rounded-2xl z-50`}
           style={{
-            height: isMobile ? `${viewportHeight}px` : '600px',
+            height: isMobile ? `${Math.min(viewportHeight, 600)}px` : '600px',
+            maxHeight: '600px',
             overflow: 'hidden',
           }}
         >
