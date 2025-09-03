@@ -15,8 +15,7 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [minimize, setMinimize] = useState(true);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState(typeof window !== 'undefined' ? window.innerHeight : 0);
 
   const handleSend = async (prompt: string) => {
     if (!prompt.trim()) return null;
@@ -36,114 +35,45 @@ export default function Chatbot() {
 
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  // Keyboard detection for mobile
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const isMobile = typeof window !== 'undefined' && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Chrome/i.test(
+    navigator.userAgent
+  );
 
-    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Chrome/i.test(
-      navigator.userAgent
-    );
-    
+  useEffect(() => {
     if (!isMobile) return;
 
-    // Ensure proper viewport setup for mobile
-    let viewportMeta = document.querySelector('meta[name="viewport"]');
-    if (!viewportMeta) {
-      viewportMeta = document.createElement('meta');
-      viewportMeta.setAttribute('name', 'viewport');
-      document.head.appendChild(viewportMeta);
-    }
-    const originalViewport = viewportMeta.getAttribute('content');
-    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    const initialHeight = window.visualViewport?.height || window.innerHeight;
+    setViewportHeight(initialHeight);
 
-    let initialViewportHeight = window.innerHeight;
-    let currentViewportHeight = window.innerHeight;
-
-    const handleViewportChange = () => {
-      currentViewportHeight = window.innerHeight;
-      const heightDiff = initialViewportHeight - currentViewportHeight;
-      
-      // Keyboard is likely open if height difference is significant (>150px)
-      const keyboardOpen = heightDiff > 150;
-      
-      setIsKeyboardOpen(keyboardOpen);
-      setKeyboardHeight(keyboardOpen ? heightDiff : 0);
-    };
-
-    // Use visualViewport API if available (modern browsers)
     if (window.visualViewport) {
       const handleVisualViewportChange = () => {
-        const heightDiff = initialViewportHeight - window.visualViewport!.height;
-        const keyboardOpen = heightDiff > 150;
-        
-        setIsKeyboardOpen(keyboardOpen);
-        setKeyboardHeight(keyboardOpen ? heightDiff : 0);
-        
-        // Force reflow to prevent layout issues
-        if (keyboardOpen) {
-          document.body.style.height = `${window.visualViewport!.height}px`;
-        } else {
-          document.body.style.height = "100%";
-        }
+        setViewportHeight(window.visualViewport!.height);
       };
 
       window.visualViewport.addEventListener('resize', handleVisualViewportChange);
       return () => {
         window.visualViewport?.removeEventListener('resize', handleVisualViewportChange);
-        // Restore original viewport
-        if (originalViewport && viewportMeta) {
-          viewportMeta.setAttribute('content', originalViewport);
-        }
-        document.body.style.height = "";
       };
     } else {
-      // Fallback for older browsers
-      const handleViewportChangeImproved = () => {
-        const currentHeight = window.innerHeight;
-        const heightDiff = initialViewportHeight - currentHeight;
-        const keyboardOpen = heightDiff > 150;
-        
-        setIsKeyboardOpen(keyboardOpen);
-        setKeyboardHeight(keyboardOpen ? heightDiff : 0);
-        
-        // Update body height for proper backdrop coverage
-        if (keyboardOpen) {
-          document.body.style.height = `${currentHeight}px`;
-        } else {
-          document.body.style.height = "100%";
-        }
+      const updateViewportHeight = () => {
+        setViewportHeight(window.innerHeight);
       };
 
-      window.addEventListener('resize', handleViewportChangeImproved);
+      window.addEventListener('resize', updateViewportHeight);
       return () => {
-        window.removeEventListener('resize', handleViewportChangeImproved);
-        // Restore original viewport
-        if (originalViewport && viewportMeta) {
-          viewportMeta.setAttribute('content', originalViewport);
-        }
-        document.body.style.height = "";
+        window.removeEventListener('resize', updateViewportHeight);
       };
     }
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (!minimize) {
       document.body.style.overflow = "hidden";
-      // Prevent scrolling issues on mobile
-      document.body.style.position = "fixed";
-      document.body.style.width = "100%";
-      document.body.style.height = "100%";
     } else {
       document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.width = "";
-      document.body.style.height = "";
     }
     return () => {
       document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.width = "";
-      document.body.style.height = "";
     };
   }, [minimize]);
 
@@ -170,28 +100,14 @@ export default function Chatbot() {
       ]);
     }
     setLoading(false);
-    
-    // Ensure input stays focused and visible after sending
-    setTimeout(() => {
-      userInput.current?.focus();
-      if (isKeyboardOpen && userInput.current) {
-        userInput.current.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'end' 
-        });
-      }
-    }, 100);
+    userInput.current?.focus();
   };
 
   useEffect(() => {
     if (messageContainer.current) {
-      // Smooth scroll to bottom, especially important when keyboard is open
-      messageContainer.current.scrollTo({
-        top: messageContainer.current.scrollHeight,
-        behavior: isKeyboardOpen ? 'smooth' : 'auto'
-      });
+      messageContainer.current.scrollTop = messageContainer.current.scrollHeight;
     }
-  }, [chats, isKeyboardOpen]);
+  }, [chats]);
 
   return (
     <div className="rac_chatbot z-50">
@@ -218,29 +134,16 @@ export default function Chatbot() {
           </div>
         </div>
       ) : (
-        <>
-          {/* Mobile backdrop to prevent main page showing through */}
-          <div 
-            className="fixed inset-0 bg-card z-40 sm:hidden"
-            style={{
-              top: isKeyboardOpen ? `${keyboardHeight}px` : '0',
-              backgroundColor: 'var(--card, #ffffff)',
-            }}
-          />
-          
-          <div
-            className={`fixed inset-0 sm:inset-auto sm:bottom-4 sm:right-4 sm:w-[400px] 
-                        bg-card text-card-foreground shadow-xl flex flex-col border-0 sm:border border-border 
-                        rounded-none sm:rounded-2xl overflow-hidden z-50`}
-            style={{
-              // Proper mobile positioning
-              height: typeof window !== 'undefined' && window.innerWidth < 640 
-                ? (isKeyboardOpen ? `calc(100vh - ${keyboardHeight}px)` : '100vh')
-                : '600px',
-            }}
-          >
-          {/* Header */}
-          <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative">
+        <div
+          className={`fixed inset-0 sm:inset-auto sm:bottom-4 sm:right-4 sm:w-[400px] 
+                      bg-card text-card-foreground shadow-xl flex flex-col border-0 sm:border border-border 
+                      rounded-none sm:rounded-2xl z-50`}
+          style={{
+            height: isMobile ? `${viewportHeight}px` : '600px',
+            overflow: 'hidden',
+          }}
+        >
+          <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative flex-shrink-0">
             <img
               src="/chatbot.png"
               alt="Chatbot"
@@ -255,15 +158,14 @@ export default function Chatbot() {
             </button>
           </div>
 
-          {/* Messages */}
           <div
-            className="flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-3 bg-muted/30 backdrop-blur-sm"
+            className="flex-1 p-3 space-y-3 bg-muted/30 backdrop-blur-sm custom-scrollbar"
             ref={messageContainer}
             style={{
-              // Ensure messages don't get cut off by keyboard
-              paddingBottom: isKeyboardOpen ? '20px' : '12px',
-              minHeight: 0, // Allows flex child to shrink
-              maxHeight: '100%', // Prevent overflow issues
+              minHeight: 0,
+              overflow: 'hidden auto',
+              overflowX: 'hidden',
+              scrollbarWidth: 'thin',
             }}
           >
             {chats.map((chat, key) => {
@@ -302,7 +204,7 @@ export default function Chatbot() {
                     <LaptopMinimal className="w-12 h-12 text-[#00000040]" />
                   </div>
                   <p className="text-base text-muted-foreground">
-                    I’m your friendly guide 🤝 <br />
+                    I'm your friendly guide 🤝 <br />
                     Feel free to ask me anything 🎉
                   </p>
                 </div>
@@ -310,40 +212,27 @@ export default function Chatbot() {
             )}
           </div>
 
-          {/* Footer */}
           <div 
-            className={`flex items-center gap-2 p-3 border-t border-border bg-background transition-all duration-200 ${
-              isKeyboardOpen ? 'relative z-10' : ''
-            }`}
-            style={{
-              // Ensure input area is always visible above keyboard
-              transform: isKeyboardOpen ? 'translateY(0)' : 'none',
-            }}
+            className="flex items-center gap-2 p-3 border-t border-border bg-background flex-shrink-0"
+            style={{ overflow: 'hidden' }}
           >
             <textarea
-              className={`flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
-                         focus:ring-primary focus:outline-none transition-all duration-200 ${
-                           isKeyboardOpen ? 'shadow-lg' : ''
-                         }`}
+              className="flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
+                         focus:ring-primary focus:outline-none transition"
               placeholder="Type your message..."
               rows={1}
               ref={userInput}
-              onFocus={() => {
-                setIsInputFocused(true);
-                // Scroll to input on focus for better UX
-                setTimeout(() => {
-                  userInput.current?.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'end' 
-                  });
-                }, 300); // Delay to allow keyboard animation
-              }}
+              onFocus={() => setIsInputFocused(true)}
               onBlur={() => setIsInputFocused(false)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   handleSendBotQuery();
                 }
+              }}
+              style={{ 
+                overflow: 'hidden',
+                maxHeight: '100px',
               }}
             />
             <button
@@ -354,8 +243,7 @@ export default function Chatbot() {
               Send
             </button>
           </div>
-          </div>
-        </>
+        </div>
       )}
     </div>
   );
