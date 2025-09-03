@@ -48,17 +48,22 @@ export default function Chatbot() {
 
   // Handle keyboard detection with Visual Viewport API
   useEffect(() => {
-    if (!minimize && window.visualViewport) {
+    if (!minimize && typeof window !== 'undefined') {
       const handleViewportChange = () => {
-        const heightDifference = window.innerHeight - window.visualViewport!.height;
-        setKeyboardHeight(heightDifference > 150 ? heightDifference : 0);
+        if (window.visualViewport) {
+          const heightDifference = window.innerHeight - window.visualViewport.height;
+          setKeyboardHeight(heightDifference > 150 ? heightDifference : 0);
+        }
       };
 
-      window.visualViewport.addEventListener('resize', handleViewportChange);
-      handleViewportChange();
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', handleViewportChange);
+      }
 
       return () => {
-        window.visualViewport?.removeEventListener('resize', handleViewportChange);
+        if (window.visualViewport) {
+          window.visualViewport.removeEventListener('resize', handleViewportChange);
+        }
         setKeyboardHeight(0);
       };
     }
@@ -97,6 +102,20 @@ export default function Chatbot() {
     }
   }, [chats]);
 
+  // Auto-focus input when chatbot opens on mobile
+  useEffect(() => {
+    if (!minimize && userInput.current) {
+      // Small delay to ensure the chatbot is fully rendered
+      const timer = setTimeout(() => {
+        if (userInput.current && window.innerWidth < 640) {
+          userInput.current.focus();
+        }
+      }, 200);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [minimize]);
+
   return (
     <div className="rac_chatbot z-50">
       {minimize ? (
@@ -129,7 +148,7 @@ export default function Chatbot() {
           style={{
             height: keyboardHeight > 0 
               ? `calc(100vh - ${keyboardHeight}px)`
-              : 'calc(100vh - env(keyboard-inset-height, 0px))',
+              : '100vh',
             minHeight: '0',
           }}
         >
@@ -202,10 +221,16 @@ export default function Chatbot() {
           <div className="flex items-center gap-2 p-3 border-t border-border bg-background flex-shrink-0">
             <textarea
               className="flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
-                         focus:ring-primary focus:outline-none transition"
+                         focus:ring-primary focus:outline-none transition touch-manipulation"
               placeholder="Type your message..."
               rows={1}
               ref={userInput}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck="false"
+              inputMode="text"
+              tabIndex={0}
               onFocus={() => {
                 setIsInputFocused(true);
                 // Scroll to bottom when keyboard opens
