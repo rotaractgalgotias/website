@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import "./_components/style/Chatbot.css";
 import AiLoad from "./_components/AiLoad";
@@ -30,48 +32,13 @@ export default function Chatbot() {
     }
   };
 
-  const [height, setHeight] = useState<number>(0);
-  const [width, setWidth] = useState<number>(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   useEffect(() => {
-    // Run only on client
-    const logViewportHeight = () => {
-      const newHeight = window.visualViewport
-        ? window.visualViewport.height
-        : window.innerHeight;
-      const newWidth = window.visualViewport
-        ? window.visualViewport.width
-        : window.innerWidth;
-      setHeight(newHeight);
-      setWidth(newWidth);
-    };
-
-    // Initial height set
-    logViewportHeight();
-
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", logViewportHeight);
-      return () => {
-        window.visualViewport?.removeEventListener("resize", logViewportHeight);
-      };
-    } else {
-      window.addEventListener("resize", logViewportHeight);
-      return () => {
-        window.removeEventListener("resize", logViewportHeight);
-      };
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log(height);
-  }, [height]);
-
-  useEffect(() => {
-    if (minimize) {
-      document.body.style.overflow = "";
-    } else {
+    if (!minimize) {
       document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
     }
     return () => {
       document.body.style.overflow = "";
@@ -130,19 +97,16 @@ export default function Chatbot() {
           />
           <div className="hidden md:flex h-full justify-center items-center">
             <div className="text-center">
-              <p className="text-[#ffffffcc] text-sm font-medium">Confused?</p>
+              <p className="text-[#ffffffcc] text-sm font-medium">Need help?</p>
               <p className="text-[#ffffff99] text-[12px]">Chat with Rotabot</p>
             </div>
           </div>
         </div>
       ) : (
         <div
-          className={`fixed ${height < 500 ? "top-0" : "bottom-0"} right-0 sm:right-4 sm:bottom-4 bg-card text-card-foreground shadow-xl 
-             flex flex-col w-full sm:h-[600px] sm:w-[400px] border border-border rounded-none sm:rounded-2xl overflow-hidden`}
-          style={{
-            height:
-              width < 640 ? (height < 600 ? `${height}px` : "100%") : "600px",
-          }}
+          className={`fixed inset-0 sm:inset-auto sm:bottom-4 sm:right-4 sm:w-[400px] 
+                      bg-card text-card-foreground shadow-xl flex flex-col border border-border 
+                      rounded-none sm:rounded-2xl overflow-hidden h-[100dvh] sm:h-[600px]`}
         >
           {/* Header */}
           <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative">
@@ -217,6 +181,8 @@ export default function Chatbot() {
               placeholder="Type your message..."
               rows={1}
               ref={userInput}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
