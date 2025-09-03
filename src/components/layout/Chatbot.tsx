@@ -15,6 +15,8 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [minimize, setMinimize] = useState(true);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   const handleSend = async (prompt: string) => {
     if (!prompt.trim()) return null;
@@ -33,6 +35,53 @@ export default function Chatbot() {
   };
 
   const [isInputFocused, setIsInputFocused] = useState(false);
+
+  // Keyboard detection for mobile
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Chrome/i.test(
+      navigator.userAgent
+    );
+    
+    if (!isMobile) return;
+
+    let initialViewportHeight = window.innerHeight;
+    let currentViewportHeight = window.innerHeight;
+
+    const handleViewportChange = () => {
+      currentViewportHeight = window.innerHeight;
+      const heightDiff = initialViewportHeight - currentViewportHeight;
+      
+      // Keyboard is likely open if height difference is significant (>150px)
+      const keyboardOpen = heightDiff > 150;
+      
+      setIsKeyboardOpen(keyboardOpen);
+      setKeyboardHeight(keyboardOpen ? heightDiff : 0);
+    };
+
+    // Use visualViewport API if available (modern browsers)
+    if (window.visualViewport) {
+      const handleVisualViewportChange = () => {
+        const heightDiff = initialViewportHeight - window.visualViewport!.height;
+        const keyboardOpen = heightDiff > 150;
+        
+        setIsKeyboardOpen(keyboardOpen);
+        setKeyboardHeight(keyboardOpen ? heightDiff : 0);
+      };
+
+      window.visualViewport.addEventListener('resize', handleVisualViewportChange);
+      return () => {
+        window.visualViewport?.removeEventListener('resize', handleVisualViewportChange);
+      };
+    } else {
+      // Fallback for older browsers
+      window.addEventListener('resize', handleViewportChange);
+      return () => {
+        window.removeEventListener('resize', handleViewportChange);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     if (!minimize) {
@@ -68,15 +117,28 @@ export default function Chatbot() {
       ]);
     }
     setLoading(false);
-    userInput.current.focus();
+    
+    // Ensure input stays focused and visible after sending
+    setTimeout(() => {
+      userInput.current?.focus();
+      if (isKeyboardOpen && userInput.current) {
+        userInput.current.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'end' 
+        });
+      }
+    }, 100);
   };
 
   useEffect(() => {
     if (messageContainer.current) {
-      messageContainer.current.scrollTop =
-        messageContainer.current.scrollHeight;
+      // Smooth scroll to bottom, especially important when keyboard is open
+      messageContainer.current.scrollTo({
+        top: messageContainer.current.scrollHeight,
+        behavior: isKeyboardOpen ? 'smooth' : 'auto'
+      });
     }
-  }, [chats]);
+  }, [chats, isKeyboardOpen]);
 
   return (
     <div className="rac_chatbot z-50">
@@ -107,6 +169,12 @@ export default function Chatbot() {
           className={`fixed inset-0 sm:inset-auto sm:bottom-4 sm:right-4 sm:w-[400px] 
                       bg-card text-card-foreground shadow-xl flex flex-col border border-border 
                       rounded-none sm:rounded-2xl overflow-hidden h-[100dvh] sm:h-[600px]`}
+          style={{
+            // Adjust height on mobile when keyboard is open
+            height: isKeyboardOpen 
+              ? `calc(100dvh - ${keyboardHeight}px)` 
+              : typeof window !== 'undefined' && window.innerWidth >= 640 ? '600px' : '100dvh'
+          }}
         >
           {/* Header */}
           <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative">
@@ -128,6 +196,10 @@ export default function Chatbot() {
           <div
             className="flex-1 overflow-y-auto p-3 space-y-3 bg-muted/30 backdrop-blur-sm"
             ref={messageContainer}
+            style={{
+              // Ensure messages don't get cut off by keyboard
+              paddingBottom: isKeyboardOpen ? '20px' : '12px'
+            }}
           >
             {chats.map((chat, key) => {
               const cleanMessage = chat.message
@@ -174,14 +246,33 @@ export default function Chatbot() {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center gap-2 p-3 border-t border-border bg-background">
+          <div 
+            className={`flex items-center gap-2 p-3 border-t border-border bg-background transition-all duration-200 ${
+              isKeyboardOpen ? 'relative z-10' : ''
+            }`}
+            style={{
+              // Ensure input area is always visible above keyboard
+              transform: isKeyboardOpen ? 'translateY(0)' : 'none',
+            }}
+          >
             <textarea
-              className="flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
-                         focus:ring-primary focus:outline-none transition"
+              className={`flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
+                         focus:ring-primary focus:outline-none transition-all duration-200 ${
+                           isKeyboardOpen ? 'shadow-lg' : ''
+                         }`}
               placeholder="Type your message..."
               rows={1}
               ref={userInput}
-              onFocus={() => setIsInputFocused(true)}
+              onFocus={() => {
+                setIsInputFocused(true);
+                // Scroll to input on focus for better UX
+                setTimeout(() => {
+                  userInput.current?.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'end' 
+                  });
+                }, 300); // Delay to allow keyboard animation
+              }}
               onBlur={() => setIsInputFocused(false)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
