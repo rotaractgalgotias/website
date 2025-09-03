@@ -33,6 +33,7 @@ export default function Chatbot() {
   };
 
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
     if (!minimize) {
@@ -43,6 +44,24 @@ export default function Chatbot() {
     return () => {
       document.body.style.overflow = "";
     };
+  }, [minimize]);
+
+  // Handle keyboard detection with Visual Viewport API
+  useEffect(() => {
+    if (!minimize && window.visualViewport) {
+      const handleViewportChange = () => {
+        const heightDifference = window.innerHeight - window.visualViewport!.height;
+        setKeyboardHeight(heightDifference > 150 ? heightDifference : 0);
+      };
+
+      window.visualViewport.addEventListener('resize', handleViewportChange);
+      handleViewportChange();
+
+      return () => {
+        window.visualViewport?.removeEventListener('resize', handleViewportChange);
+        setKeyboardHeight(0);
+      };
+    }
   }, [minimize]);
 
   const userInput = useRef<HTMLTextAreaElement>(null);
@@ -106,7 +125,13 @@ export default function Chatbot() {
         <div
           className={`fixed inset-0 sm:inset-auto sm:bottom-4 sm:right-4 sm:w-[400px] 
                       bg-card text-card-foreground shadow-xl flex flex-col border border-border 
-                      rounded-none sm:rounded-2xl overflow-hidden h-[100dvh] sm:h-[600px]`}
+                      rounded-none sm:rounded-2xl overflow-hidden h-[100vh] sm:h-[600px]`}
+          style={{
+            height: keyboardHeight > 0 
+              ? `calc(100vh - ${keyboardHeight}px)`
+              : 'calc(100vh - env(keyboard-inset-height, 0px))',
+            minHeight: '0',
+          }}
         >
           {/* Header */}
           <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative">
@@ -126,7 +151,7 @@ export default function Chatbot() {
 
           {/* Messages */}
           <div
-            className="flex-1 overflow-y-auto p-3 space-y-3 bg-muted/30 backdrop-blur-sm"
+            className="flex-1 overflow-y-auto p-3 space-y-3 bg-muted/30 backdrop-blur-sm min-h-0"
             ref={messageContainer}
           >
             {chats.map((chat, key) => {
@@ -174,14 +199,22 @@ export default function Chatbot() {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center gap-2 p-3 border-t border-border bg-background">
+          <div className="flex items-center gap-2 p-3 border-t border-border bg-background flex-shrink-0">
             <textarea
               className="flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
                          focus:ring-primary focus:outline-none transition"
               placeholder="Type your message..."
               rows={1}
               ref={userInput}
-              onFocus={() => setIsInputFocused(true)}
+              onFocus={() => {
+                setIsInputFocused(true);
+                // Scroll to bottom when keyboard opens
+                setTimeout(() => {
+                  if (messageContainer.current) {
+                    messageContainer.current.scrollTop = messageContainer.current.scrollHeight;
+                  }
+                }, 300);
+              }}
               onBlur={() => setIsInputFocused(false)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
