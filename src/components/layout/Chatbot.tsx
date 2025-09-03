@@ -33,7 +33,6 @@ export default function Chatbot() {
   };
 
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
     if (!minimize) {
@@ -44,29 +43,6 @@ export default function Chatbot() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [minimize]);
-
-  // Handle keyboard detection with Visual Viewport API
-  useEffect(() => {
-    if (!minimize && typeof window !== 'undefined') {
-      const handleViewportChange = () => {
-        if (window.visualViewport) {
-          const heightDifference = window.innerHeight - window.visualViewport.height;
-          setKeyboardHeight(heightDifference > 150 ? heightDifference : 0);
-        }
-      };
-
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', handleViewportChange);
-      }
-
-      return () => {
-        if (window.visualViewport) {
-          window.visualViewport.removeEventListener('resize', handleViewportChange);
-        }
-        setKeyboardHeight(0);
-      };
-    }
   }, [minimize]);
 
   const userInput = useRef<HTMLTextAreaElement>(null);
@@ -102,20 +78,6 @@ export default function Chatbot() {
     }
   }, [chats]);
 
-  // Auto-focus input when chatbot opens on mobile
-  useEffect(() => {
-    if (!minimize && userInput.current) {
-      // Small delay to ensure the chatbot is fully rendered
-      const timer = setTimeout(() => {
-        if (userInput.current && window.innerWidth < 640) {
-          userInput.current.focus();
-        }
-      }, 200);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [minimize]);
-
   return (
     <div className="rac_chatbot z-50">
       {minimize ? (
@@ -144,13 +106,7 @@ export default function Chatbot() {
         <div
           className={`fixed inset-0 sm:inset-auto sm:bottom-4 sm:right-4 sm:w-[400px] 
                       bg-card text-card-foreground shadow-xl flex flex-col border border-border 
-                      rounded-none sm:rounded-2xl overflow-hidden h-[100vh] sm:h-[600px]`}
-          style={{
-            height: keyboardHeight > 0 
-              ? `calc(100vh - ${keyboardHeight}px)`
-              : '100vh',
-            minHeight: '0',
-          }}
+                      rounded-none sm:rounded-2xl overflow-hidden h-[100dvh] sm:h-[600px]`}
         >
           {/* Header */}
           <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative">
@@ -170,7 +126,7 @@ export default function Chatbot() {
 
           {/* Messages */}
           <div
-            className="flex-1 overflow-y-auto p-3 space-y-3 bg-muted/30 backdrop-blur-sm min-h-0"
+            className="flex-1 overflow-y-auto p-3 space-y-3 bg-muted/30 backdrop-blur-sm"
             ref={messageContainer}
           >
             {chats.map((chat, key) => {
@@ -218,28 +174,14 @@ export default function Chatbot() {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center gap-2 p-3 border-t border-border bg-background flex-shrink-0">
+          <div className="flex items-center gap-2 p-3 border-t border-border bg-background">
             <textarea
               className="flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
-                         focus:ring-primary focus:outline-none transition touch-manipulation"
+                         focus:ring-primary focus:outline-none transition"
               placeholder="Type your message..."
               rows={1}
               ref={userInput}
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-              spellCheck="false"
-              inputMode="text"
-              tabIndex={0}
-              onFocus={() => {
-                setIsInputFocused(true);
-                // Scroll to bottom when keyboard opens
-                setTimeout(() => {
-                  if (messageContainer.current) {
-                    messageContainer.current.scrollTop = messageContainer.current.scrollHeight;
-                  }
-                }, 300);
-              }}
+              onFocus={() => setIsInputFocused(true)}
               onBlur={() => setIsInputFocused(false)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
