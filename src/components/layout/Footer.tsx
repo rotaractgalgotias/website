@@ -60,11 +60,10 @@ export default function Footer() {
             <div className="lg:col-span-2 space-y-6">
               <Link href="/" className="inline-flex items-center gap-3 mb-6">
                 <Image
-                  src="/logo.png"
+                  src="/favicon.ico"
                   alt="Rotaract Club Logo"
-                  width={48}
-                  height={48}
-                  className="h-12 w-12"
+                  width={100}
+                  height={100}
                 />
                 <div>
                   <h2 className="text-xl font-semibold">Rotaract Club</h2>

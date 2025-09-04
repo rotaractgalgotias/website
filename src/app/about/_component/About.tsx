@@ -15,6 +15,7 @@ import {
   Mic2,
   Wrench,
   UserPlus,
+  Computer,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -134,6 +135,16 @@ export const domains: Domain[] = [
       "Maintain tech infrastructure",
       "Provide event tech support",
       "Develop internal tools"
+    ]
+  },
+  {
+    icon: Computer,
+    title: "Media Services",
+    description: "Create and distribute engaging visual content to promote the club's initiatives and activities.",
+    activities: [
+      "Create and distribute engaging visual content",
+      "Promote the club's initiatives and activities",
+      "Create and distribute engaging visual content"
     ]
   }
 ];
