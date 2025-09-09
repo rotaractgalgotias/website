@@ -32,8 +32,8 @@ export default function Header() {
             <Image
               src="/favicon.ico"
               alt="Rotaract Club Logo"
-              width={70}
-              height={70}
+              width={60}
+              height={60}
             />
             <div className="flex flex-col -space-y-1">
               <span className="text-lg font-bold">Rotaract Club</span>
