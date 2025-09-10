@@ -143,15 +143,15 @@ export default function Chatbot() {
         <div
           className={`z-[90] ${
             isMobile 
-              ? 'fixed inset-0 w-full' 
+              ? 'fixed inset-0 w-full h-full' 
               : 'fixed bottom-4 right-4 w-[420px] h-[650px]'
           } bg-background shadow-2xl flex flex-col ${
             isMobile ? 'border-0' : 'border border-border rounded-2xl'
           }`}
            style={{
              ...(isMobile ? {
-               height: `${viewportHeight}px`,
-               maxHeight: `${viewportHeight}px`,
+               height: '100dvh',
+               maxHeight: '100dvh',
              } : {})
            }}
         >
@@ -182,11 +182,11 @@ export default function Chatbot() {
 
            {/* Messages Container */}
            <div 
-             className={`overflow-y-auto p-4 space-y-4 ${isMobile ? '' : 'flex-1'}`}
+             className={`flex-1 overflow-y-auto p-4 space-y-4 ${isMobile ? 'mobile-messages-container' : ''}`}
              ref={messageContainer}
              style={{
                ...(isMobile ? {
-                 height: `${viewportHeight - 80 - 80 - keyboardHeight}px`, // viewport - header - input - keyboard
+                 paddingBottom: 'calc(80px + max(0px, env(keyboard-inset-height, 0px)))',
                } : {})
              }}
            >
@@ -234,13 +234,13 @@ export default function Chatbot() {
            {/* Input Area */}
            <div
              className={`border-t bg-background p-4 flex-shrink-0 ${
-               isMobile ? 'fixed bottom-0 left-0 right-0' : 'rounded-b-2xl relative'
+               isMobile ? 'absolute bottom-0 left-0 right-0 mobile-input-area' : 'rounded-b-2xl relative'
              }`}
              style={{
-               ...(isMobile && keyboardHeight > 0 ? {
-                 bottom: `${keyboardHeight}px`,
-               } : {}),
                zIndex: isMobile ? 100 : 'auto',
+               ...(isMobile ? {
+                 bottom: 'max(0px, env(keyboard-inset-height, 0px))',
+               } : {})
              }}
            >
             <form onSubmit={handleSendBotQuery} className="flex gap-2">
