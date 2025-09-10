@@ -24,6 +24,8 @@ export const directorAndCoordinatorPositions = [
   Position.TECHNICAL_SERVICES,
   Position.MANAGEMENT_TEAM_HEAD,
   Position.DIRECTORIAL_COMMITTEE_CHAIR,
+  Position.MULTIMEDIA_SERVICE,
+  Position.PHOTOGRAPHY_SERVICE,
 ];
 
 export const allPositions = [

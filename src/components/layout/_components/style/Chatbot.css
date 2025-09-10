@@ -11,3 +11,38 @@
   cursor: pointer;
   position: relative;
 }
+
+/* Mobile keyboard support */
+@supports (height: 100dvh) {
+  .mobile-chatbot-container {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+  }
+}
+
+/* Keyboard inset support */
+@supports (bottom: env(keyboard-inset-height)) {
+  .mobile-input-area {
+    bottom: max(0px, env(keyboard-inset-height, 0px)) !important;
+  }
+  
+  .mobile-messages-container {
+    margin-bottom: max(0px, env(keyboard-inset-height, 0px)) !important;
+  }
+}
+
+/* Fallback for older browsers */
+.mobile-safe-area {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Prevent zoom on input focus */
+.mobile-input {
+  font-size: 16px !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-input {
+    font-size: 16px !important;
+  }
+}

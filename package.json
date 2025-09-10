@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "prisma generate && next dev --turbopack",
     "build": "next build",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
     "start": "next start",
     "lint": "next lint"
   },

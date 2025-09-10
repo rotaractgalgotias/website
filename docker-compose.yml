@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: rotaract_website_db
+    environment:
+      POSTGRES_DB: rotaract_website
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5000:5432"
+    volumes:
+      - rotaract_website_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  rotaract_website_data:

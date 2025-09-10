@@ -21,13 +21,13 @@ export default function LayoutProvider({
   }
 
   return (
-    <div className="min-h-dvh flex flex-col relative">
+    <div className="flex flex-col relative">
       {/* <ScrollToTop /> */}
+      <Chatbot />
       <TopLoader />
       <TopHeader />
       <Header />
       <div className="flex-1">{children}</div>
-      <Chatbot />
       <Footer />
     </div>
   );
