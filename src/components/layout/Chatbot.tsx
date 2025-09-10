@@ -11,7 +11,6 @@ import "./_components/style/Chatbot.css";
 
 export default function Chatbot() {
   const [minimize, setMinimize] = useState(true);
-  const [viewportHeight, setViewportHeight] = useState(typeof window !== 'undefined' ? window.innerHeight : 0);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const { messages, sendMessage, status } = useChat();
@@ -22,33 +21,21 @@ export default function Chatbot() {
     navigator.userAgent
   );
 
-  // Track viewport height changes for mobile keyboard
+  // Simple keyboard detection for mobile
   useEffect(() => {
     if (!isMobile) return;
 
-    const updateViewportHeight = () => {
+    const handleViewportChange = () => {
       const currentHeight = window.visualViewport?.height || window.innerHeight;
       const fullHeight = window.innerHeight;
       const calculatedKeyboardHeight = Math.max(0, fullHeight - currentHeight);
-      
-      
-      setViewportHeight(currentHeight);
       setKeyboardHeight(calculatedKeyboardHeight);
     };
 
-    // Initial setup
-    updateViewportHeight();
-
     if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', updateViewportHeight);
+      window.visualViewport.addEventListener('resize', handleViewportChange);
       return () => {
-        window.visualViewport?.removeEventListener('resize', updateViewportHeight);
-      };
-    } else {
-      // Fallback for older browsers
-      window.addEventListener('resize', updateViewportHeight);
-      return () => {
-        window.removeEventListener('resize', updateViewportHeight);
+        window.visualViewport?.removeEventListener('resize', handleViewportChange);
       };
     }
   }, [isMobile]);
@@ -56,13 +43,38 @@ export default function Chatbot() {
   useEffect(() => {
     if (!minimize) {
       document.body.style.overflow = "hidden";
+      // Prevent scrolling on mobile when chat is open
+      if (isMobile) {
+        document.body.style.position = "fixed";
+        document.body.style.width = "100%";
+        document.body.style.height = "100vh";
+        document.body.style.top = "0";
+        document.body.style.left = "0";
+        // Prevent any touch scrolling
+        document.documentElement.style.overflow = "hidden";
+        document.documentElement.style.height = "100vh";
+      }
     } else {
       document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.documentElement.style.overflow = "";
+      document.documentElement.style.height = "";
     }
     return () => {
       document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.documentElement.style.overflow = "";
+      document.documentElement.style.height = "";
     };
-  }, [minimize]);
+  }, [minimize, isMobile]);
 
   // Handle browser back button to close chat
   useEffect(() => {
@@ -103,11 +115,13 @@ export default function Chatbot() {
   useEffect(() => {
     if (messageContainer.current) {
       const container = messageContainer.current;
-      // Smooth scroll to bottom when new messages arrive
-      container.scrollTo({
-        top: container.scrollHeight,
-        behavior: 'smooth'
-      });
+      // Smooth scroll to bottom when new messages arrive, with extra offset for padding
+      setTimeout(() => {
+        container.scrollTo({
+          top: container.scrollHeight + 100, // Extra offset to account for padding
+          behavior: 'smooth'
+        });
+      }, 100);
     }
   }, [messages]);
 
@@ -125,7 +139,7 @@ export default function Chatbot() {
   }, [status]);
 
   return (
-    <div className={`z-[90] fixed ${minimize ? 'bottom-4 right-4' : 'top-0 right-0 w-full h-full'}`}>
+    <div className={`z-[90] fixed ${minimize ? 'bottom-4 right-4' : 'inset-0'}`}>
       {minimize ? (
         <Button
           onClick={() => setMinimize(false)}
@@ -140,21 +154,27 @@ export default function Chatbot() {
           </div>
         </Button>
       ) : (
-        <div
-          className={`z-[90] ${
-            isMobile 
-              ? 'fixed inset-0 w-full h-full' 
-              : 'fixed bottom-4 right-4 w-[420px] h-[650px]'
-          } bg-background shadow-2xl flex flex-col ${
-            isMobile ? 'border-0' : 'border border-border rounded-2xl'
-          }`}
-           style={{
-             ...(isMobile ? {
-               height: '100dvh',
-               maxHeight: '100dvh',
-             } : {})
-           }}
-        >
+        <>
+          {/* Background overlay for mobile */}
+          {isMobile && (
+            <div 
+              className="fixed inset-0 bg-background z-[89]"
+              style={{ touchAction: 'none' }}
+            />
+          )}
+          
+          <div
+            className={`z-[90] bg-background shadow-2xl flex flex-col ${
+              isMobile 
+                ? 'fixed inset-0 w-full h-full border-0' 
+                : 'fixed bottom-4 right-4 w-[420px] h-[650px] border border-border rounded-2xl'
+            }`}
+            style={{
+              ...(isMobile ? {
+                touchAction: 'none', // Prevent unwanted touch scrolling
+              } : {})
+            }}
+          >
           {/* Header */}
           <div 
             className={`flex items-center justify-between p-4 border-b bg-primary text-primary-foreground flex-shrink-0 ${
@@ -182,12 +202,18 @@ export default function Chatbot() {
 
            {/* Messages Container */}
            <div 
-             className={`flex-1 overflow-y-auto p-4 space-y-4 ${isMobile ? 'mobile-messages-container' : ''}`}
+             className="overflow-y-auto p-4 space-y-4"
              ref={messageContainer}
              style={{
                ...(isMobile ? {
-                 paddingBottom: 'calc(80px + max(0px, env(keyboard-inset-height, 0px)))',
-               } : {})
+                 height: `calc(100vh - 160px - ${keyboardHeight}px)`, // Full height - header - input - keyboard
+                 paddingBottom: '100px', // Extra padding to ensure messages are visible above input
+                 touchAction: 'pan-y', // Allow only vertical scrolling
+                 overscrollBehavior: 'contain', // Prevent scroll chaining
+               } : {
+                 flex: 1,
+                 paddingBottom: '20px'
+               })
              }}
            >
             {messages.length === 0 && (
@@ -234,12 +260,15 @@ export default function Chatbot() {
            {/* Input Area */}
            <div
              className={`border-t bg-background p-4 flex-shrink-0 ${
-               isMobile ? 'absolute bottom-0 left-0 right-0 mobile-input-area' : 'rounded-b-2xl relative'
+               isMobile ? 'fixed bottom-0 left-0 right-0' : 'rounded-b-2xl'
              }`}
              style={{
-               zIndex: isMobile ? 100 : 'auto',
+               ...(isMobile && keyboardHeight > 0 ? {
+                 bottom: `${keyboardHeight}px`,
+                 zIndex: 1000,
+               } : {}),
                ...(isMobile ? {
-                 bottom: 'max(0px, env(keyboard-inset-height, 0px))',
+                 touchAction: 'manipulation', // Prevent unwanted touch behaviors
                } : {})
              }}
            >
@@ -249,9 +278,7 @@ export default function Chatbot() {
                    value={input}
                    onChange={(e) => setInput(e.target.value)}
                    placeholder="Ask ROTABOT anything about Rotaract..."
-                   className={`w-full resize-none rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[44px] max-h-32 ${
-                     isMobile ? 'mobile-input' : ''
-                   }`}
+                   className="w-full resize-none rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[44px] max-h-32"
                   rows={1}
                   disabled={status !== 'ready'}
                   onKeyDown={(e) => {
@@ -260,16 +287,17 @@ export default function Chatbot() {
                       handleSendBotQuery(e);
                     }
                   }}
-                  onFocus={() => {
-                    if (isMobile && messageContainer.current) {
-                      setTimeout(() => {
-                        messageContainer.current?.scrollTo({
-                          top: messageContainer.current.scrollHeight,
-                          behavior: 'smooth'
-                        });
-                      }, 300);
-                    }
-                  }}
+                   onFocus={() => {
+                     // Scroll to bottom on focus with extra offset for padding
+                     setTimeout(() => {
+                       if (messageContainer.current) {
+                         messageContainer.current.scrollTo({
+                           top: messageContainer.current.scrollHeight + 100,
+                           behavior: 'smooth'
+                         });
+                       }
+                     }, 300);
+                   }}
                 />
               </div>
               <Button
@@ -281,7 +309,8 @@ export default function Chatbot() {
               </Button>
             </form>
           </div>
-        </div>
+          </div>
+        </>
       )}
     </div>
   );
