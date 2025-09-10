@@ -125,11 +125,11 @@ export default function Chatbot() {
   }, [status]);
 
   return (
-    <div className="z-[90] h-full fixed top-0 right-0 w-full h-full">
+    <div className={`z-[90] fixed ${minimize ? 'bottom-4 right-4' : 'top-0 right-0 w-full h-full'}`}>
       {minimize ? (
         <Button
           onClick={() => setMinimize(false)}
-          className="fixed z-50 bottom-4 right-4 h-14 w-14 sm:w-auto  px-4 bg-primary hover:bg-primary/90 text-white shadow-lg rounded-full transition-all duration-200 hover:scale-105"
+          className="z-50 h-14 w-14 sm:w-auto px-4 bg-primary hover:bg-primary/90 text-white shadow-lg rounded-full transition-all duration-200 hover:scale-105"
           aria-label="Open chatbot"
           title="Need help? Chat with ROTABOT!"
         >
