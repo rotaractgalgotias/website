@@ -141,6 +141,8 @@ enum Position {
   TECHNICAL_SERVICES
   MANAGEMENT_TEAM_HEAD
   MEMBER
+  MULTIMEDIA_SERVICE // for backward compatibility
+  PHOTOGRAPHY_SERVICE // for backward compatibility
 }
 
 model Newsletter {

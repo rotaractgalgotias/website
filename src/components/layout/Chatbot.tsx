@@ -15,7 +15,6 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [minimize, setMinimize] = useState(true);
-  const [viewportHeight, setViewportHeight] = useState(typeof window !== 'undefined' ? window.innerHeight : 0);
 
   const handleSend = async (prompt: string) => {
     if (!prompt.trim()) return null;
@@ -33,38 +32,11 @@ export default function Chatbot() {
     }
   };
 
-  const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const isMobile = typeof window !== 'undefined' && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Chrome/i.test(
+  const isMobile = typeof window !== 'undefined' && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );
 
-  useEffect(() => {
-    if (!isMobile) return;
-
-    const initialHeight = window.visualViewport?.height || window.innerHeight;
-    setViewportHeight(initialHeight);
-
-    if (window.visualViewport) {
-      const handleVisualViewportChange = () => {
-        setViewportHeight(window.visualViewport!.height);
-      };
-
-      window.visualViewport.addEventListener('resize', handleVisualViewportChange);
-      return () => {
-        window.visualViewport?.removeEventListener('resize', handleVisualViewportChange);
-      };
-    } else {
-      const updateViewportHeight = () => {
-        setViewportHeight(window.innerHeight);
-      };
-
-      window.addEventListener('resize', updateViewportHeight);
-      return () => {
-        window.removeEventListener('resize', updateViewportHeight);
-      };
-    }
-  }, [isMobile]);
 
   useEffect(() => {
     if (!minimize) {
@@ -75,6 +47,33 @@ export default function Chatbot() {
     return () => {
       document.body.style.overflow = "";
     };
+  }, [minimize]);
+
+  // Handle browser back button to close chat
+  useEffect(() => {
+    let isClosingViaBack = false;
+
+    if (!minimize) {
+      // Push a new state when chat opens
+      window.history.pushState({ chatOpen: true }, '', window.location.href);
+      
+      const handlePopState = (event: PopStateEvent) => {
+        // Close chat when back button is pressed
+        isClosingViaBack = true;
+        setMinimize(true);
+      };
+
+      window.addEventListener('popstate', handlePopState);
+      
+      return () => {
+        window.removeEventListener('popstate', handlePopState);
+        // When chat is closed normally (not via back button), 
+        // remove the chat state from history
+        if (!isClosingViaBack && window.history.state?.chatOpen) {
+          window.history.back();
+        }
+      };
+    }
   }, [minimize]);
 
   const userInput = useRef<HTMLTextAreaElement>(null);
@@ -110,7 +109,7 @@ export default function Chatbot() {
   }, [chats]);
 
   return (
-    <div className="rac_chatbot z-50">
+    <div className="z-[90] h-full fixed top-0 right-0 w-full h-full">
       {minimize ? (
         <div
           className="fixed z-50 bottom-4 right-4 flex items-center gap-2 justify-center bg-primary text-white 
@@ -135,16 +134,21 @@ export default function Chatbot() {
         </div>
       ) : (
         <div
-          className={`fixed inset-0 sm:inset-auto sm:bottom-4 sm:right-4 sm:w-[400px] 
-                      bg-card text-card-foreground shadow-xl flex flex-col border-0 sm:border border-border 
-                      rounded-none sm:rounded-2xl z-50`}
+          className={`z-[90] ${
+            isMobile 
+              ? 'fixed inset-0 w-full mobile-chatbot-container' 
+              : 'fixed bottom-4 right-4 w-[400px]'
+          } bg-card text-card-foreground shadow-xl flex flex-col ${
+            isMobile ? 'border-0' : 'border border-border rounded-2xl'
+          }`}
           style={{
-            height: isMobile ? `${Math.min(viewportHeight, 600)}px` : '600px',
-            maxHeight: '600px',
-            overflow: 'hidden',
+            height: isMobile ? '100dvh' : '600px',
+            maxHeight: isMobile ? '100dvh' : '600px',
           }}
         >
-          <div className="flex items-center gap-3 bg-primary text-primary-foreground p-3 relative flex-shrink-0">
+          <div className={`flex items-center gap-3 bg-primary text-primary-foreground p-3 flex-shrink-0 ${
+            isMobile ? 'sticky top-0' : 'relative'
+          }`}>
             <img
               src="/chatbot.png"
               alt="Chatbot"
@@ -159,14 +163,16 @@ export default function Chatbot() {
             </button>
           </div>
 
-          <div
-            className="flex-1 p-3 space-y-3 bg-muted/30 backdrop-blur-sm custom-scrollbar"
+          <div 
+            className={`p-3 space-y-3 bg-muted/30 backdrop-blur-sm custom-scrollbar flex-1 overflow-y-auto ${
+              isMobile ? 'mobile-messages-container' : ''
+            }`}
             ref={messageContainer}
             style={{
-              minHeight: 0,
-              overflow: 'hidden auto',
-              overflowX: 'hidden',
-              scrollbarWidth: 'thin',
+              ...(isMobile ? {
+                paddingBottom: '80px', // Account for input area height
+                marginBottom: `max(0px, env(keyboard-inset-height, 0px))`
+              } : {})
             }}
           >
             {chats.map((chat, key) => {
@@ -180,10 +186,9 @@ export default function Chatbot() {
                 >
                   <div
                     className={`px-4 py-2 rounded-2xl shadow-sm max-w-[75%] text-sm animate-fadeIn 
-                      ${
-                        chat.from === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted text-muted-foreground"
+                      ${chat.from === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
                       }`}
                   >
                     <div dangerouslySetInnerHTML={{ __html: cleanMessage }} />
@@ -213,25 +218,44 @@ export default function Chatbot() {
             )}
           </div>
 
-          <div 
-            className="flex items-center gap-2 p-3 border-t border-border bg-background flex-shrink-0"
-            style={{ overflow: 'hidden' }}
+          <div
+            className={`flex items-center gap-2 p-3 border-t border-border bg-background flex-shrink-0 ${
+              isMobile ? 'absolute bottom-0 left-0 right-0 mobile-input-area mobile-safe-area' : 'relative'
+            }`}
+            style={{ 
+              overflow: 'hidden',
+              zIndex: isMobile ? 100 : 'auto',
+              ...(isMobile ? {
+                bottom: `max(0px, env(keyboard-inset-height, 0px))`,
+              } : {})
+            }}
           >
             <textarea
-              className="flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
-                         focus:ring-primary focus:outline-none transition"
+              className={`flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
+                         focus:ring-primary focus:outline-none transition ${
+                           isMobile ? 'mobile-input' : ''
+                         }`}
               placeholder="Type your message..."
               rows={1}
               ref={userInput}
-              onFocus={() => setIsInputFocused(true)}
-              onBlur={() => setIsInputFocused(false)}
+              onFocus={() => {
+                // Scroll to bottom when input is focused on mobile
+                if (isMobile && messageContainer.current) {
+                  setTimeout(() => {
+                    messageContainer.current?.scrollTo({
+                      top: messageContainer.current.scrollHeight,
+                      behavior: 'smooth'
+                    });
+                  }, 300);
+                }
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   handleSendBotQuery();
                 }
               }}
-              style={{ 
+              style={{
                 overflow: 'hidden',
                 maxHeight: '100px',
               }}
