@@ -39,125 +39,114 @@ export const domains: Domain[] = [
   {
     icon: Users,
     title: "Community Services",
-    description:
-      "Lead initiatives that make a direct impact in local communities through service and outreach programs.",
+    description: "Lead initiatives that make a direct impact in local communities through service and outreach programs.",
     activities: [
       "Organize cleanliness drives",
       "Host community health camps",
-      "Distribute essential supplies",
-    ],
+      "Distribute essential supplies"
+    ]
   },
   {
     icon: Globe,
     title: "International Services",
-    description:
-      "Foster global understanding through international collaboration and cultural exchange.",
+    description: "Foster global understanding through international collaboration and cultural exchange.",
     activities: [
       "Coordinate global Rotaract collaborations",
       "Promote cultural exchange",
-      "Support international causes",
-    ],
+      "Support international causes"
+    ]
   },
   {
     icon: Share2,
     title: "Public Relations",
-    description:
-      "Enhance the club's visibility and reputation through strategic communication and media outreach.",
+    description: "Enhance the club's visibility and reputation through strategic communication and media outreach.",
     activities: [
       "Manage public image",
       "Write press releases",
-      "Handle external communications",
-    ],
+      "Handle external communications"
+    ]
   },
   {
     icon: BookOpen,
     title: "Literary Services",
-    description:
-      "Encourage literary expression and intellectual engagement through various activities.",
+    description: "Encourage literary expression and intellectual engagement through various activities.",
     activities: [
       "Host debates and quizzes",
       "Organize writing competitions",
-      "Conduct reading circles",
-    ],
+      "Conduct reading circles"
+    ]
   },
-
+  
   {
     icon: UserPlus,
     title: "Club Services",
-    description:
-      "Facilitate smooth internal functioning and foster fellowship within the club.",
+    description: "Facilitate smooth internal functioning and foster fellowship within the club.",
     activities: [
       "Organize member induction",
       "Host internal events",
-      "Maintain club harmony",
-    ],
+      "Maintain club harmony"
+    ]
   },
   {
     icon: Users,
     title: "Management Services",
-    description:
-      "Oversee planning and implementation of club projects and ensure operational excellence.",
+    description: "Oversee planning and implementation of club projects and ensure operational excellence.",
     activities: [
       "Supervise logistics",
       "Monitor event timelines",
-      "Coordinate with service chairs",
-    ],
+      "Coordinate with service chairs"
+    ]
   },
   {
     icon: Briefcase,
     title: "Professional Development",
-    description:
-      "Empower members through career-oriented workshops, seminars, and industry exposure.",
+    description: "Empower members through career-oriented workshops, seminars, and industry exposure.",
     activities: [
       "Host skill-building sessions",
       "Organize internships and networking",
-      "Conduct mentorship programs",
-    ],
+      "Conduct mentorship programs"
+    ]
   },
   {
     icon: Mic2,
     title: "Performing Arts",
-    description:
-      "Promote creativity through cultural performances and artistic expression.",
+    description: "Promote creativity through cultural performances and artistic expression.",
     activities: [
       "Organize dance and music events",
       "Coordinate talent shows",
-      "Promote art-based outreach",
-    ],
+      "Promote art-based outreach"
+    ]
   },
   {
     icon: Radio,
     title: "Social Media Services",
-    description:
-      "Engage audiences and promote the club's work on social platforms.",
+    description: "Engage audiences and promote the club's work on social platforms.",
     activities: [
       "Create and schedule posts",
       "Run awareness campaigns",
-      "Analyze social engagement",
-    ],
+      "Analyze social engagement"
+    ]
   },
   {
     icon: Wrench,
     title: "Technical Services",
-    description:
-      "Support all tech-based operations and ensure smooth event execution with digital tools.",
+    description: "Support all tech-based operations and ensure smooth event execution with digital tools.",
     activities: [
       "Maintain tech infrastructure",
       "Provide event tech support",
-      "Develop internal tools",
-    ],
+      "Develop internal tools"
+    ]
   },
   {
     icon: Computer,
     title: "Media Services",
-    description:
-      "Create and distribute engaging visual content to promote the club's initiatives and activities.",
+    description: "Create and distribute engaging visual content to promote the club's initiatives and activities.",
     activities: [
       "Create and distribute engaging visual content",
       "Promote the club's initiatives and activities",
-      "Create and distribute engaging visual content",
-    ],
-  },
+      "Create and distribute engaging visual content"
+    ]
+  }
 ];
 
 export default function AboutUs() {
@@ -284,10 +273,7 @@ export default function AboutUs() {
                       <li key={i}>{activity}</li>
                     ))}
                   </ul>
-                  <Link
-                    href={`/about/domains/${domain.title.toLowerCase().replace(/\s+/g, "-")}`}
-                    prefetch
-                  >
+                  <Link href={`/about/domains/${domain.title.toLowerCase().replace(/\s+/g, "-")}`} prefetch>
                     <Button
                       variant="link"
                       className="p-0 h-auto text-primary hover:underline"

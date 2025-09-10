@@ -11,7 +11,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^3.9.1",
-    "@prisma/client": "6.9.0",
+    "@prisma/client": "^6.16.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.2",
@@ -36,8 +36,8 @@
     "nextjs-toploader": "^3.7.15",
     "nprogress": "^0.2.0",
     "nuqs": "^2.2.1",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.2",
     "react-pageflip": "^2.0.3",
     "resend": "^4.0.1",
@@ -49,12 +49,12 @@
   "devDependencies": {
     "@types/node": "^20",
     "@types/nprogress": "^0.2.3",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "^18.3.7",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
-    "prisma": "^6.9.0",
+    "prisma": "^6.16.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

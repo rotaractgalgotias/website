@@ -30,10 +30,10 @@ export default function Header() {
         <div className="container flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <Image
-              src="/logo.png"
+              src="/favicon.ico"
               alt="Rotaract Club Logo"
-              width={40}
-              height={40}
+              width={60}
+              height={60}
             />
             <div className="flex flex-col -space-y-1">
               <span className="text-lg font-bold">Rotaract Club</span>
