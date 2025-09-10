@@ -18,7 +18,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 const formSchema = z.object({
   membershipType: z.enum(["full", "updates"], {
-    required_error: "Please select a membership type",
+    message: "Please select a membership type",
   }),
   agreeToTerms: z.boolean().refine((value) => value === true, {
     message: "You must agree to the terms and conditions",
