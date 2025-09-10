@@ -15,6 +15,8 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [minimize, setMinimize] = useState(true);
+  const [viewportHeight, setViewportHeight] = useState(typeof window !== 'undefined' ? window.innerHeight : 0);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleSend = async (prompt: string) => {
     if (!prompt.trim()) return null;
@@ -37,6 +39,36 @@ export default function Chatbot() {
     navigator.userAgent
   );
 
+  // Track viewport height changes for mobile keyboard
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const updateViewportHeight = () => {
+      const currentHeight = window.visualViewport?.height || window.innerHeight;
+      const fullHeight = window.innerHeight;
+      const calculatedKeyboardHeight = Math.max(0, fullHeight - currentHeight);
+      
+      
+      setViewportHeight(currentHeight);
+      setKeyboardHeight(calculatedKeyboardHeight);
+    };
+
+    // Initial setup
+    updateViewportHeight();
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', updateViewportHeight);
+      return () => {
+        window.visualViewport?.removeEventListener('resize', updateViewportHeight);
+      };
+    } else {
+      // Fallback for older browsers
+      window.addEventListener('resize', updateViewportHeight);
+      return () => {
+        window.removeEventListener('resize', updateViewportHeight);
+      };
+    }
+  }, [isMobile]);
 
   useEffect(() => {
     if (!minimize) {
@@ -142,13 +174,18 @@ export default function Chatbot() {
             isMobile ? 'border-0' : 'border border-border rounded-2xl'
           }`}
           style={{
-            height: isMobile ? '100dvh' : '600px',
-            maxHeight: isMobile ? '100dvh' : '600px',
+            height: isMobile ? `${viewportHeight}px` : '600px',
+            maxHeight: isMobile ? `${viewportHeight}px` : '600px',
           }}
         >
-          <div className={`flex items-center gap-3 bg-primary text-primary-foreground p-3 flex-shrink-0 ${
-            isMobile ? 'sticky top-0' : 'relative'
-          }`}>
+          <div 
+            className={`flex items-center gap-3 bg-primary text-primary-foreground p-3 flex-shrink-0 ${
+              isMobile ? 'sticky top-0' : 'relative'
+            }`}
+            style={{
+              height: '70px', // Fixed height for header
+            }}
+          >
             <img
               src="/chatbot.png"
               alt="Chatbot"
@@ -164,14 +201,14 @@ export default function Chatbot() {
           </div>
 
           <div 
-            className={`p-3 space-y-3 bg-muted/30 backdrop-blur-sm custom-scrollbar flex-1 overflow-y-auto ${
-              isMobile ? 'mobile-messages-container' : ''
+            className={`p-3 space-y-3 bg-muted/30 backdrop-blur-sm custom-scrollbar overflow-y-auto ${
+              isMobile ? 'mobile-messages-container' : 'flex-1'
             }`}
             ref={messageContainer}
             style={{
               ...(isMobile ? {
-                paddingBottom: '80px', // Account for input area height
-                marginBottom: `max(0px, env(keyboard-inset-height, 0px))`
+                height: `${viewportHeight - 70 - 70}px`, // Total height - header (70px) - input area (70px)
+                paddingBottom: '20px',
               } : {})
             }}
           >
@@ -225,9 +262,7 @@ export default function Chatbot() {
             style={{ 
               overflow: 'hidden',
               zIndex: isMobile ? 100 : 'auto',
-              ...(isMobile ? {
-                bottom: `max(0px, env(keyboard-inset-height, 0px))`,
-              } : {})
+              height: '70px', // Fixed height for input area
             }}
           >
             <textarea
