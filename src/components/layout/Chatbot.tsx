@@ -1,42 +1,57 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useChat } from '@ai-sdk/react';
+import { Streamdown } from 'streamdown';
+import type { UIMessage } from 'ai';
+import { Message } from "@/components/ai-elements/message";
+import { Button } from "@/components/ui/button";
+import { X, MessageCircle } from "lucide-react";
 import "./_components/style/Chatbot.css";
-import AiLoad from "./_components/AiLoad";
-import { LaptopMinimal } from "lucide-react";
-
-type ChatMessage = {
-  from: "user" | "bot";
-  message: string;
-};
 
 export default function Chatbot() {
-  const [chats, setChat] = useState<ChatMessage[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState("");
   const [minimize, setMinimize] = useState(true);
+  const [viewportHeight, setViewportHeight] = useState(typeof window !== 'undefined' ? window.innerHeight : 0);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  const handleSend = async (prompt: string) => {
-    if (!prompt.trim()) return null;
-    try {
-      const res = await fetch("/api/gemini", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, lastResponse: response }),
-      });
-      const data = await res.json();
-      setResponse(data.text);
-      return data.text;
-    } catch (err: any) {
-      throw new Error(err.message || "Failed to get Gemini response");
-    }
-  };
+  const { messages, sendMessage, status } = useChat();
+  const [input, setInput] = useState('');
 
 
   const isMobile = typeof window !== 'undefined' && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );
 
+  // Track viewport height changes for mobile keyboard
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const updateViewportHeight = () => {
+      const currentHeight = window.visualViewport?.height || window.innerHeight;
+      const fullHeight = window.innerHeight;
+      const calculatedKeyboardHeight = Math.max(0, fullHeight - currentHeight);
+      
+      
+      setViewportHeight(currentHeight);
+      setKeyboardHeight(calculatedKeyboardHeight);
+    };
+
+    // Initial setup
+    updateViewportHeight();
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', updateViewportHeight);
+      return () => {
+        window.visualViewport?.removeEventListener('resize', updateViewportHeight);
+      };
+    } else {
+      // Fallback for older browsers
+      window.addEventListener('resize', updateViewportHeight);
+      return () => {
+        window.removeEventListener('resize', updateViewportHeight);
+      };
+    }
+  }, [isMobile]);
 
   useEffect(() => {
     if (!minimize) {
@@ -76,197 +91,182 @@ export default function Chatbot() {
     }
   }, [minimize]);
 
-  const userInput = useRef<HTMLTextAreaElement>(null);
   const messageContainer = useRef<HTMLDivElement>(null);
 
-  const handleSendBotQuery = async () => {
-    const userinput = userInput.current?.value;
-    if (!userinput || loading) return;
-    setLoading(true);
-
-    setChat((prev) => [...prev, { from: "user", message: userinput }]);
-    userInput.current.value = "";
-
-    try {
-      const data = await handleSend(userinput);
-      const botMessage =
-        typeof data === "string" ? data : "Sorry, I didn't understand.";
-      setChat((prev) => [...prev, { from: "bot", message: botMessage }]);
-    } catch (err) {
-      setChat((prev) => [
-        ...prev,
-        { from: "bot", message: "Something went wrong! ❌" },
-      ]);
-    }
-    setLoading(false);
-    userInput.current?.focus();
+  const handleSendBotQuery = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || status !== 'ready') return;
+    sendMessage({ text: input });
+    setInput('');
   };
 
   useEffect(() => {
     if (messageContainer.current) {
-      messageContainer.current.scrollTop = messageContainer.current.scrollHeight;
+      const container = messageContainer.current;
+      // Smooth scroll to bottom when new messages arrive
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      });
     }
-  }, [chats]);
+  }, [messages]);
+
+  // Also scroll to bottom when status changes (loading starts/ends)
+  useEffect(() => {
+    if (messageContainer.current && status !== 'ready') {
+      const container = messageContainer.current;
+      setTimeout(() => {
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: 'smooth'
+        });
+      }, 100);
+    }
+  }, [status]);
 
   return (
     <div className="z-[90] h-full fixed top-0 right-0 w-full h-full">
       {minimize ? (
-        <div
-          className="fixed z-50 bottom-4 right-4 flex items-center gap-2 justify-center bg-primary text-white 
-             shadow-lg rounded-full p-3 cursor-pointer hover:scale-105 chatbot-button transition-transform"
+        <Button
           onClick={() => setMinimize(false)}
-          role="button"
+          className="fixed z-50 bottom-4 right-4 h-14 w-14 sm:w-auto  px-4 bg-primary hover:bg-primary/90 text-white shadow-lg rounded-full transition-all duration-200 hover:scale-105"
           aria-label="Open chatbot"
-          title="Need help? Chat with us!"
+          title="Need help? Chat with ROTABOT!"
         >
-          <img
-            width={40}
-            src="/chatbot.png"
-            alt="Chatbot Icon"
-            className="chatbot_icon"
-          />
-          <div className="hidden md:flex h-full justify-center items-center">
-            <div className="text-center">
-              <p className="text-[#ffffffcc] text-sm font-medium">Need help?</p>
-              <p className="text-[#ffffff99] text-[12px]">Chat with Rotabot</p>
-            </div>
+          <MessageCircle className="sm:mr-2 size-6" />
+          <div className="hidden md:flex flex-col items-start">
+            <span className="text-sm font-medium">Need help?</span>
+            <span className="text-xs opacity-80">Chat with ROTABOT</span>
           </div>
-        </div>
+        </Button>
       ) : (
         <div
           className={`z-[90] ${
             isMobile 
-              ? 'fixed inset-0 w-full mobile-chatbot-container' 
-              : 'fixed bottom-4 right-4 w-[400px]'
-          } bg-card text-card-foreground shadow-xl flex flex-col ${
+              ? 'fixed inset-0 w-full' 
+              : 'fixed bottom-4 right-4 w-[420px] h-[650px]'
+          } bg-background shadow-2xl flex flex-col ${
             isMobile ? 'border-0' : 'border border-border rounded-2xl'
           }`}
           style={{
-            height: isMobile ? '100dvh' : '600px',
-            maxHeight: isMobile ? '100dvh' : '600px',
+            ...(isMobile ? {
+              height: `${viewportHeight - keyboardHeight}px`,
+              maxHeight: `${viewportHeight - keyboardHeight}px`,
+            } : {})
           }}
         >
-          <div className={`flex items-center gap-3 bg-primary text-primary-foreground p-3 flex-shrink-0 ${
-            isMobile ? 'sticky top-0' : 'relative'
-          }`}>
-            <img
-              src="/chatbot.png"
-              alt="Chatbot"
-              className="w-10 h-10 rounded-full shadow-md"
-            />
-            <span className="font-semibold text-lg tracking-wide">ROTABOT</span>
-            <button
-              className="ml-auto text-xl hover:scale-125 transition-transform"
+          {/* Header */}
+          <div 
+            className={`flex items-center justify-between p-4 border-b bg-primary text-primary-foreground flex-shrink-0 ${
+              isMobile ? 'sticky top-0' : 'rounded-t-2xl'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <MessageCircle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">ROTABOT</h3>
+                <p className="text-xs opacity-80">AI Assistant</p>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setMinimize(true)}
+              className="text-primary-foreground hover:bg-white/20"
             >
-              ×
-            </button>
+              <X className="w-5 h-5" />
+            </Button>
           </div>
 
+          {/* Messages Container */}
           <div 
-            className={`p-3 space-y-3 bg-muted/30 backdrop-blur-sm custom-scrollbar flex-1 overflow-y-auto ${
-              isMobile ? 'mobile-messages-container' : ''
-            }`}
+            className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0"
             ref={messageContainer}
-            style={{
-              ...(isMobile ? {
-                paddingBottom: '80px', // Account for input area height
-                marginBottom: `max(0px, env(keyboard-inset-height, 0px))`
-              } : {})
-            }}
           >
-            {chats.map((chat, key) => {
-              const cleanMessage = chat.message
-                .replace(/^```[a-z]*\n/, "")
-                .replace(/```$/, "");
-              return (
-                <div
-                  key={key}
-                  className={`flex ${chat.from === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`px-4 py-2 rounded-2xl shadow-sm max-w-[75%] text-sm animate-fadeIn 
-                      ${chat.from === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground"
-                      }`}
-                  >
-                    <div dangerouslySetInnerHTML={{ __html: cleanMessage }} />
-                  </div>
-                </div>
-              );
-            })}
-            {loading && (
-              <div className="flex justify-start">
-                <div className="px-4 py-2 rounded-2xl bg-muted text-muted-foreground shadow-sm">
-                  <AiLoad />
-                </div>
-              </div>
-            )}
-            {chats.length === 0 && (
-              <div className="flex w-full h-full items-center justify-center">
-                <div className="text-center px-6 sm:px-10 py-8">
-                  <div className="flex justify-center mb-6">
-                    <LaptopMinimal className="w-12 h-12 text-[#00000040]" />
-                  </div>
-                  <p className="text-base text-muted-foreground">
-                    I'm your friendly guide 🤝 <br />
-                    Feel free to ask me anything 🎉
+            {messages.length === 0 && (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <MessageCircle className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-foreground mb-2">Welcome to ROTABOT! 🤖</h3>
+                  <p className="text-muted-foreground max-w-sm">
+                    I'm your friendly guide to the Rotaract Club of Galgotias Educational Institutions. 
+                    Feel free to ask me anything! 🎉
                   </p>
                 </div>
               </div>
             )}
+            
+            {messages.map((message: UIMessage) => (
+              <Message
+                key={message.id}
+                from={message.role}
+                className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300"
+              >
+                <div className="flex flex-col gap-2 overflow-hidden rounded-lg text-sm max-w-[80%] px-3 py-2 bg-secondary text-foreground">
+                  {message.parts
+                    .filter((part: any) => part.type === 'text')
+                    .map((part: any, index: number) => (
+                        <Streamdown key={index} className="px-2">{part.text}</Streamdown>
+                    ))}
+                </div>
+              </Message>
+            ))}
+            
+            {status !== 'ready' && (
+              <div className="flex justify-start">
+                <div className="bg-muted rounded-2xl p-4 max-w-xs">
+                  <div className="flex items-center space-x-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                    <span className="text-sm text-muted-foreground">ROTABOT is thinking...</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
+          {/* Input Area */}
           <div
-            className={`flex items-center gap-2 p-3 border-t border-border bg-background flex-shrink-0 ${
-              isMobile ? 'absolute bottom-0 left-0 right-0 mobile-input-area mobile-safe-area' : 'relative'
+            className={`border-t bg-background p-4 flex-shrink-0 ${
+              isMobile ? '' : 'rounded-b-2xl'
             }`}
-            style={{ 
-              overflow: 'hidden',
-              zIndex: isMobile ? 100 : 'auto',
-              ...(isMobile ? {
-                bottom: `max(0px, env(keyboard-inset-height, 0px))`,
-              } : {})
-            }}
           >
-            <textarea
-              className={`flex-1 border border-input rounded-xl p-2 text-sm resize-none focus:ring-2 
-                         focus:ring-primary focus:outline-none transition ${
-                           isMobile ? 'mobile-input' : ''
-                         }`}
-              placeholder="Type your message..."
-              rows={1}
-              ref={userInput}
-              onFocus={() => {
-                // Scroll to bottom when input is focused on mobile
-                if (isMobile && messageContainer.current) {
-                  setTimeout(() => {
-                    messageContainer.current?.scrollTo({
-                      top: messageContainer.current.scrollHeight,
-                      behavior: 'smooth'
-                    });
-                  }, 300);
-                }
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSendBotQuery();
-                }
-              }}
-              style={{
-                overflow: 'hidden',
-                maxHeight: '100px',
-              }}
-            />
-            <button
-              className="bg-primary text-primary-foreground px-4 py-2 rounded-xl shadow-sm 
-                         hover:bg-primary/90 transition"
-              onClick={handleSendBotQuery}
-            >
-              Send
-            </button>
+            <form onSubmit={handleSendBotQuery} className="flex gap-2">
+              <div className="flex-1 relative">
+                <textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask ROTABOT anything about Rotaract..."
+                  className="w-full resize-none rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[44px] max-h-32"
+                  rows={1}
+                  disabled={status !== 'ready'}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendBotQuery(e);
+                    }
+                  }}
+                  onFocus={() => {
+                    if (isMobile && messageContainer.current) {
+                      setTimeout(() => {
+                        messageContainer.current?.scrollTo({
+                          top: messageContainer.current.scrollHeight,
+                          behavior: 'smooth'
+                        });
+                      }, 300);
+                    }
+                  }}
+                />
+              </div>
+              <Button
+                type="submit"
+                disabled={status !== 'ready' || !input.trim()}
+                className="h-11 px-4"
+              >
+                Send
+              </Button>
+            </form>
           </div>
         </div>
       )}
