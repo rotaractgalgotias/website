@@ -148,12 +148,12 @@ export default function Chatbot() {
           } bg-background shadow-2xl flex flex-col ${
             isMobile ? 'border-0' : 'border border-border rounded-2xl'
           }`}
-          style={{
-            ...(isMobile ? {
-              height: `${viewportHeight - keyboardHeight}px`,
-              maxHeight: `${viewportHeight - keyboardHeight}px`,
-            } : {})
-          }}
+           style={{
+             ...(isMobile ? {
+               height: `${viewportHeight}px`,
+               maxHeight: `${viewportHeight}px`,
+             } : {})
+           }}
         >
           {/* Header */}
           <div 
@@ -180,11 +180,16 @@ export default function Chatbot() {
             </Button>
           </div>
 
-          {/* Messages Container */}
-          <div 
-            className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0"
-            ref={messageContainer}
-          >
+           {/* Messages Container */}
+           <div 
+             className={`overflow-y-auto p-4 space-y-4 ${isMobile ? '' : 'flex-1'}`}
+             ref={messageContainer}
+             style={{
+               ...(isMobile ? {
+                 height: `${viewportHeight - 80 - 80 - keyboardHeight}px`, // viewport - header - input - keyboard
+               } : {})
+             }}
+           >
             {messages.length === 0 && (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
@@ -226,19 +231,27 @@ export default function Chatbot() {
             )}
           </div>
 
-          {/* Input Area */}
-          <div
-            className={`border-t bg-background p-4 flex-shrink-0 ${
-              isMobile ? '' : 'rounded-b-2xl'
-            }`}
-          >
+           {/* Input Area */}
+           <div
+             className={`border-t bg-background p-4 flex-shrink-0 ${
+               isMobile ? 'fixed bottom-0 left-0 right-0' : 'rounded-b-2xl relative'
+             }`}
+             style={{
+               ...(isMobile && keyboardHeight > 0 ? {
+                 bottom: `${keyboardHeight}px`,
+               } : {}),
+               zIndex: isMobile ? 100 : 'auto',
+             }}
+           >
             <form onSubmit={handleSendBotQuery} className="flex gap-2">
               <div className="flex-1 relative">
-                <textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask ROTABOT anything about Rotaract..."
-                  className="w-full resize-none rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[44px] max-h-32"
+                 <textarea
+                   value={input}
+                   onChange={(e) => setInput(e.target.value)}
+                   placeholder="Ask ROTABOT anything about Rotaract..."
+                   className={`w-full resize-none rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[44px] max-h-32 ${
+                     isMobile ? 'mobile-input' : ''
+                   }`}
                   rows={1}
                   disabled={status !== 'ready'}
                   onKeyDown={(e) => {
