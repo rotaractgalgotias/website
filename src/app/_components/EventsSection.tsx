@@ -12,18 +12,17 @@ import {
 } from "@/components/ui/carousel";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Autoplay from "embla-carousel-autoplay"
-
+import Autoplay from "embla-carousel-autoplay";
 
 const EVENTS_IMAGES = [
   {
-    image: "/cover/nandotsav.jpg",
+    image: "/cover/slider/jashn_e_diwali.jpg",
   },
   {
-    image: "/cover/antarang.jpg",
+    image: "/cover/slider/dental_camp.jpg",
   },
   {
-    image: "/cover/chaav20.jpg",
+    image: "/cover/slider/sahara.jpg",
   },
 ];
 
@@ -99,10 +98,10 @@ export default function EventsSection() {
                     an idea for an event, please let us know.
                   </p>
                   <Link href={"/contact-us"}>
-                  <Button variant="link" className="p-0">
-                    Contact us
-                    <ArrowRightIcon className="ml-2 h-4 w-4" />
-                  </Button>
+                    <Button variant="link" className="p-0">
+                      Contact us
+                      <ArrowRightIcon className="ml-2 h-4 w-4" />
+                    </Button>
                   </Link>
                 </CardContent>
               </Card>

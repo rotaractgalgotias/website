@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
@@ -67,11 +66,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" >
+    <html lang="en">
       <head>
-        <meta 
-          name="viewport" 
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content, viewport-fit=cover" 
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content, viewport-fit=cover"
         />
       </head>
       <body
@@ -80,16 +79,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Suspense>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            forcedTheme="light"
-            disableTransitionOnChange
-          >
-            <LayoutProvider>{children}</LayoutProvider>
-          </ThemeProvider>
-
+          <LayoutProvider>{children}</LayoutProvider>
           <Toaster />
         </Suspense>
       </body>
