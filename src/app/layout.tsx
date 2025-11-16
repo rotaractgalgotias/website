@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import LayoutProvider from "@/components/providers/LayoutProvider";
 import { Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -74,7 +73,6 @@ export default function RootLayout({
         />
       </head>
       <body
-        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         className={cn(inter.className, "antialiased")}
         suppressHydrationWarning
       >
