@@ -6,7 +6,7 @@ export function VideoPlayer() {
           autoPlay
           className="w-full h-auto"
           src="/main_video.mp4"
-          poster="/team_23-24.jpg"
+          poster="/about_image1.jpg"
           muted={true}
           loop
           playsInline
