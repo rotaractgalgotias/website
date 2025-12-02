@@ -1,15 +1,40 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, Code, Lightbulb, Rocket, Calendar, MapPin, Users } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Code, Lightbulb, Rocket, Calendar, MapPin, Users, X, ChevronLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function HackathonPage() {
+    const [selectedTrack, setSelectedTrack] = useState<null | { title: string, icon: React.ReactNode, desc: string, color: string }>(null);
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            setMousePosition({ x: e.clientX, y: e.clientY });
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, []);
+
     return (
-        <div className="min-h-screen bg-black text-white selection:bg-green-500 selection:text-black font-sans overflow-x-hidden">
+        <div className="min-h-screen bg-black text-white selection:bg-green-500 selection:text-black font-sans overflow-x-hidden relative">
+            {/* Global Spotlight Effect */}
+            <div
+                className="pointer-events-none fixed inset-0 z-30 transition-opacity duration-300"
+                style={{
+                    background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255,255,255,0.06), transparent 40%)`
+                }}
+            />
             {/* Navigation (Simple Overlay) */}
             <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 py-6 md:px-12 mix-blend-difference">
-                <div className="text-2xl font-bold tracking-tighter">ROTARACT</div>
+                <div className="flex items-center gap-4">
+                    <Link href="/" className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+                        <ChevronLeft className="w-6 h-6" />
+                    </Link>
+                    <div className="text-2xl font-bold tracking-tighter">ROTARACT</div>
+                </div>
                 <a
                     href="#register"
                     className="px-6 py-2 bg-white text-black font-medium rounded-full hover:scale-105 transition-transform"
@@ -22,6 +47,8 @@ export default function HackathonPage() {
             <section className="relative min-h-screen flex flex-col justify-center items-center px-4 overflow-hidden">
                 {/* Abstract Background Elements */}
                 <div className="absolute inset-0 z-0">
+                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-20" />
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
                     <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-green-500/20 rounded-full blur-[120px] animate-pulse" />
                     <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] animate-pulse delay-1000" />
                 </div>
@@ -68,16 +95,6 @@ export default function HackathonPage() {
                     </motion.div>
                 </div>
 
-                {/* Scroll Indicator */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1, duration: 1 }}
-                    className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-500"
-                >
-                    <span className="text-xs uppercase tracking-widest">Scroll</span>
-                    <div className="w-[1px] h-12 bg-gradient-to-b from-zinc-500 to-transparent" />
-                </motion.div>
             </section>
 
             {/* About Section */}
@@ -135,11 +152,12 @@ export default function HackathonPage() {
                         className="relative"
                     >
                         <div className="aspect-square rounded-2xl overflow-hidden bg-zinc-900 border border-white/10 relative group">
-                            <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            {/* Placeholder for an image or 3D element */}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="text-zinc-700 text-xl font-mono">Visual Placeholder</span>
-                            </div>
+                            <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
+                            <img
+                                src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop"
+                                alt="Hackathon Team"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                            />
                         </div>
                         {/* Decorative elements */}
                         <div className="absolute -top-6 -right-6 w-24 h-24 bg-green-500 rounded-full blur-[40px] opacity-50" />
@@ -210,7 +228,10 @@ export default function HackathonPage() {
                                     <p className="text-zinc-400 leading-relaxed mb-8">
                                         {track.desc}
                                     </p>
-                                    <button className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider hover:gap-3 transition-all">
+                                    <button
+                                        onClick={() => setSelectedTrack(track)}
+                                        className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider hover:gap-3 transition-all"
+                                    >
                                         Details <ArrowRight className="w-4 h-4" />
                                     </button>
                                 </div>
@@ -220,7 +241,79 @@ export default function HackathonPage() {
                 </div>
             </section>
 
-            {/* Footer */}
+            {/* Track Details Modal */}
+            <AnimatePresence>
+                {selectedTrack && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                        onClick={() => setSelectedTrack(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="relative w-full max-w-lg bg-zinc-900 border border-white/10 rounded-3xl p-8 overflow-hidden"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className={`absolute top-0 left-0 w-full h-2 bg-gradient-to-r ${selectedTrack.color}`} />
+
+                            <button
+                                onClick={() => setSelectedTrack(null)}
+                                className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 transition-colors"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+
+                            <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${selectedTrack.color} flex items-center justify-center text-black mb-6`}>
+                                {selectedTrack.icon}
+                            </div>
+
+                            <h3 className="text-3xl font-bold mb-4">{selectedTrack.title}</h3>
+                            <p className="text-zinc-400 text-lg mb-8">{selectedTrack.desc}</p>
+
+                            <div className="space-y-4">
+                                <div className="p-4 rounded-xl bg-white/5 border border-white/5">
+                                    <h4 className="font-bold mb-2 text-sm uppercase tracking-wider text-zinc-500">Evaluation Criteria</h4>
+                                    <ul className="list-disc list-inside text-zinc-300 space-y-1">
+                                        <li>Innovation & Creativity</li>
+                                        <li>Technical Complexity</li>
+                                        <li>Impact & Feasibility</li>
+                                    </ul>
+                                </div>
+
+                                <button className="w-full py-4 bg-white text-black font-bold rounded-xl hover:scale-[1.02] transition-transform">
+                                    Register for {selectedTrack.title}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Coming Soon Section */}
+            <section className="py-24 bg-zinc-950 border-t border-white/10 overflow-hidden">
+                <div className="text-center mb-16 px-6">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                    >
+                        <span className="inline-block py-1 px-3 rounded-full bg-green-500/10 border border-green-500/20 text-green-500 text-sm font-medium tracking-wider mb-4">
+                            EXPANDING HORIZONS
+                        </span>
+                        <h2 className="text-4xl md:text-6xl font-bold mb-6">
+                            Coming Soon to <span className="text-white">Your Campus</span>
+                        </h2>
+                        <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+                            We are bringing the sustainable innovation wave to universities across the region. Get ready to hack for a better future right at your doorstep.
+                        </p>
+                    </motion.div>
+                </div>
+            </section>
+
             <footer className="py-12 px-6 border-t border-white/10 bg-zinc-950 text-center">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="text-left">
@@ -234,6 +327,6 @@ export default function HackathonPage() {
                     </div>
                 </div>
             </footer>
-        </div>
+        </div >
     );
 }
