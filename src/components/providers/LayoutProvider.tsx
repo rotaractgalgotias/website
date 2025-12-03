@@ -15,8 +15,8 @@ export default function LayoutProvider({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-
-  if (pathname === "/join-now") {
+  const noLayoutPages = ["/join-now", "/hackathon"];
+  if (noLayoutPages.includes(pathname)) {
     return <>{children}</>;
   }
 
