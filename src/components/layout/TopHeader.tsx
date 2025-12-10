@@ -41,7 +41,7 @@ const TopHeader = () => {
               </span>
 
               <Link
-                href="/hackathon"
+                href="/sustainability-hackathon"
                 className="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-300 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] whitespace-nowrap"
               >
                 Visit Now
