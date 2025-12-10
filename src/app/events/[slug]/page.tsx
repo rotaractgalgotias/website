@@ -7,6 +7,9 @@ import { cn, currentYear } from "@/lib/utils";
 import { Metadata } from "next";
 import { DateDisplay } from "@/components/events/Date";
 
+// Force dynamic rendering to prevent build-time database queries
+export const dynamic = "force-dynamic";
+
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -45,23 +48,6 @@ Promise<Metadata> {
       site: "https://rotaractgalgotias.org/",
     },
   };
-}
-
-export async function generateStaticParams() {
-  const events = await prisma.event.findMany({
-    where: {
-      year: {
-        year: currentYear,
-      },
-    },
-    select: {
-      slug: true,
-    },
-  });
-
-  return events.map((post) => ({
-    slug: post.slug,
-  }));
 }
 
 export default async function page({

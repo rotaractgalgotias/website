@@ -1,3 +1,5 @@
+"use client";
+
 export function VideoPlayer() {
   return (
     <div>
@@ -11,6 +13,7 @@ export function VideoPlayer() {
           loop
           playsInline
           preload="auto"
+          suppressHydrationWarning
         />
       </div>
     </div>

@@ -3,6 +3,9 @@ import OurArchivePage from "./_components/Archive";
 import { prisma } from "@/lib/prisma";
 import { currentYear } from "@/lib/utils";
 
+// Force dynamic rendering to prevent build-time database queries
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Our Archive",
   openGraph: {
@@ -42,9 +45,8 @@ export default async function page() {
   console.log(years);
 
   // Filter out years that don't have any PRESIDENT roles with valid members
-  const filteredYears = years.filter((year) => 
-    year.roles.length > 0 && 
-    year.roles[0]?.member?.name
+  const filteredYears = years.filter(
+    (year) => year.roles.length > 0 && year.roles[0]?.member?.name
   );
 
   console.log("filtered years", filteredYears);
