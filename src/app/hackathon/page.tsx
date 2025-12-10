@@ -359,7 +359,7 @@ export default function HackathonPage() {
           </div>
           <div className="flex gap-6">
             <a
-              href="#"
+              href="https://www.instagram.com/sustainiblity_hackathon?igsh=YjdmYnpwcmZ3cWpy"
               className="text-zinc-400 hover:text-white transition-colors"
             >
               Instagram

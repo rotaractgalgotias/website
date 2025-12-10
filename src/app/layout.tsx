@@ -28,7 +28,10 @@ export const metadata: Metadata = {
       "At Rotaract Galgotias, we function as a service-oriented organization that strives to create a better world through volunteerism, community service, and professional development. We are a part of the global network of Rotaract clubs sponsored by Rotary International, which gives us access to a wealth of resources and opportunities for growth.",
     images: [
       {
-        url: "https://rotaractgalgotias.org/logo.png",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Rotaract Galgotias Logo",
       },
     ],
     url: "https://rotaractgalgotias.org/",
