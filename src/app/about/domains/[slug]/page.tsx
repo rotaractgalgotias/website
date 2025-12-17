@@ -1,69 +1,52 @@
-"use client";
+import path from "path";
+import fs from "fs";
+import matter from "gray-matter";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
-import { useParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import MaxWidthWrapper from "@/components/wrappers/MaxWidthWrapper";
-import { motion } from "framer-motion";
-import { domains, type Domain } from "../../_component/About";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { MDXRemote, type MDXRemoteSerializeResult } from "next-mdx-remote";
+import { FadeInWrapper } from "@/components/wrappers/FadeInWrapper";
+import { ServerMDX } from "@/components/mdx/ServerMDX";
+import { domains, type Domain } from "../../_component/About";
 
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+type Props = {
+  params: Promise<{ slug: string }>;
 };
 
-interface DomainContent {
-  content: MDXRemoteSerializeResult<Record<string, unknown>>;
-  frontmatter: {
-    title: string;
-    description: string;
-    date: string;
-    author: string;
-  };
+async function getDomainContent(slug: string) {
+  const filePath = path.join(process.cwd(), "src/content/domains", `${slug}.mdx`);
+  if (!fs.existsSync(filePath)) {
+    return null;
+  }
+  const fileContent = fs.readFileSync(filePath, "utf8");
+  const { data: frontmatter, content } = matter(fileContent);
+  return { frontmatter, content };
 }
 
-export default function DomainPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  const [mdxContent, setMdxContent] = useState<DomainContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+export default async function DomainPage({ params }: Props) {
+  const { slug } = await params;
 
-  // Find the domain that matches the slug
+  const mdxData = await getDomainContent(slug);
+
+  // Find the domain metadata from the constant (for fallback/icons)
   const domain = domains.find(
     (d: Domain) => d.title.toLowerCase().replace(/\s+/g, "-") === slug
   );
 
-  useEffect(() => {
-    const fetchMdxContent = async () => {
-      try {
-        const response = await fetch(`/api/domains/${slug}`);
-        if (!response.ok) throw new Error("Failed to fetch MDX content");
-        const data = await response.json();
-        setMdxContent(data);
-      } catch (error) {
-        console.error("Error fetching MDX content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (domain) {
-      fetchMdxContent();
-    }
-  }, [slug, domain]);
-
   if (!domain) {
+    // If domain isn't in the static list, we consider it 404 even if MDX exists?
+    // Or we rely on MDX? Original code required 'domain' to exist.
+    // Original code: if (!domain) return <NotFoundUI />
+    // We'll stick to that.
+
     return (
       <MaxWidthWrapper className="py-8">
         <Card>
           <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">
-              Domain not found
-            </p>
+            <p className="text-center text-muted-foreground">Domain not found</p>
             <div className="mt-4 text-center">
               <Link href="/about">
                 <Button variant="outline">
@@ -83,56 +66,42 @@ export default function DomainPage() {
   return (
     <div className="min-h-screen bg-background">
       <MaxWidthWrapper className="py-8">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeIn}
-          className="space-y-8"
-        >
+        <FadeInWrapper className="space-y-8">
           <Card className="border-none bg-background/50 shadow-none">
             <CardHeader className="flex flex-row items-center space-x-4">
               <div className="p-3 rounded-full bg-primary/10 text-primary">
                 <Icon className="h-8 w-8" />
               </div>
               <CardTitle className="text-3xl font-bold tracking-tight">
-                {mdxContent?.frontmatter.title || domain.title}
+                {mdxData?.frontmatter.title || domain.title}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              {isLoading ? (
-                <div className="animate-pulse space-y-4">
-                  <div className="h-4 bg-muted rounded w-3/4"></div>
-                  <div className="h-4 bg-muted rounded"></div>
-                  <div className="h-4 bg-muted rounded w-5/6"></div>
-                </div>
-              ) : mdxContent ? (
+              {mdxData ? (
                 <div className="prose prose-lg dark:prose-invert max-w-none">
                   <div className="space-y-4">
-                    {mdxContent.frontmatter.author && (
+                    {mdxData.frontmatter.author && (
                       <p className="text-sm text-muted-foreground">
-                        By {mdxContent.frontmatter.author}
+                        By {mdxData.frontmatter.author}
                       </p>
                     )}
-                    {mdxContent.frontmatter.date && (
+                    {mdxData.frontmatter.date && (
                       <p className="text-sm text-muted-foreground">
                         Last updated:{" "}
-                        {new Date(
-                          mdxContent.frontmatter.date
-                        ).toLocaleDateString()}
+                        {new Date(mdxData.frontmatter.date).toLocaleDateString()}
                       </p>
                     )}
                   </div>
                   <div className="mt-6">
-                    <MDXRemote {...mdxContent.content} />
+                    <ServerMDX source={mdxData.content} />
                   </div>
                 </div>
               ) : (
-                // Fallback to domain data if MDX content is not available
+                // Fallback
                 <>
                   <p className="text-lg text-muted-foreground">
                     {domain.description}
                   </p>
-
                   <div className="space-y-4">
                     <h3 className="text-xl font-semibold">Key Activities</h3>
                     <ul className="space-y-2">
@@ -153,7 +122,7 @@ export default function DomainPage() {
               )}
             </CardContent>
           </Card>
-        </motion.div>
+        </FadeInWrapper>
       </MaxWidthWrapper>
     </div>
   );

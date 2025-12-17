@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { MapPinIcon, UsersIcon, ClockIcon } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { cn, currentYear } from "@/lib/utils";
 import { Metadata } from "next";
 import { DateDisplay } from "@/components/events/Date";
+import { ServerMDX } from "@/components/mdx/ServerMDX";
 
 // Force dynamic rendering to prevent build-time database queries
 export const dynamic = "force-dynamic";
@@ -18,7 +18,7 @@ type Props = {
 export async function generateMetadata({
   params,
 }: Props): //   parent: ResolvingMetadata
-Promise<Metadata> {
+  Promise<Metadata> {
   const slug = (await params).slug;
   // read route params
   const event = await prisma.event.findUnique({
@@ -138,7 +138,7 @@ export default async function page({
         </div>
 
         <div className="prose lg:prose-lg prose-primary max-w-none">
-          <MDXRemote source={event.content} />
+          <ServerMDX source={event.content} />
         </div>
       </div>
     </div>
