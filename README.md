@@ -1,4 +1,5 @@
 # Rotaract Galgotias Website
+
 This repository contains the codebase for the Rotaract Galgotias website built with Next.js and Prisma.
 
 ## Features
