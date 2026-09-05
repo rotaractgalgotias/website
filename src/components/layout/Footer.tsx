@@ -26,7 +26,7 @@ const footerLinks = {
   ],
   documents: [
     { name: "Newsletters", href: "/newsletter" },
-    
+
   ],
 };
 
@@ -47,7 +47,7 @@ const socialLinks = [
   },
   {
     icon: GithubIcon,
-    href: "https://github.com/rotaractgalgotias/website-rewrite",
+    href: "https://github.com/rotaractgalgotias/website",
   },
 ];
 
