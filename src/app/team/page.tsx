@@ -87,6 +87,8 @@ export default async function TeamPage() {
     return 0;
   });
 
+  const sessionYear = `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+
   const teamHierarchy = [
     { title: "Board Council", members: council },
     { title: "Board of Directors", members: director },
@@ -96,7 +98,7 @@ export default async function TeamPage() {
       <MaxWidthWrapper className="py-6 lg:py-12">
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <div>
-            <h1 className="text-4xl font-bold mb-4">Team 2025-26</h1>
+            <h1 className="text-4xl font-bold mb-4">Team {sessionYear}</h1>
             <p className="text-muted-foreground mb-6">
               Rotaract Galgotias follows a hierarchical system where the college
               year determines the roles and responsibilities of its members. The

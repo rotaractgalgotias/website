@@ -7,6 +7,8 @@ import Link from "next/link";
 import React from "react";
 import { motion } from "framer-motion";
 
+import { currentYear } from "@/lib/utils";
+
 export default function BoardCouncil({
   members,
 }: {
@@ -30,6 +32,9 @@ export default function BoardCouncil({
     setMounted(true);
   }, []);
   if (!mounted) return null;
+
+  const sessionYear = `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+
   // Shuffle all members except council members
   const shuffledMembers = members
     .filter((member) => member.roles[0].memberType !== "COUNCIL")
@@ -50,7 +55,7 @@ export default function BoardCouncil({
         transition={{ duration: 0.5 }}
         className="text-3xl font-bold text-center mb-12"
       >
-        Board Council 2025-26
+        Board Council {sessionYear}
       </motion.h1>
       <motion.div
         initial={{ opacity: 0 }}
