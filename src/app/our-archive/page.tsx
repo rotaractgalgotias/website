@@ -11,28 +11,35 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function page() {
-  const years = await prisma.year.findMany({
-    include: {
-      roles: {
-        where: {
-          position: "PRESIDENT",
-        },
-        select: {
-          member: {
-            select: {
-              name: true,
+  let years: any[] = [];
+  try {
+    years = await prisma.year.findMany({
+      include: {
+        roles: {
+          where: {
+            position: "PRESIDENT",
+          },
+          select: {
+            member: {
+              select: {
+                name: true,
+              },
             },
           },
         },
       },
-    },
-    where: {
-      year: {
-        not: currentYear,
+      where: {
+        year: {
+          not: currentYear,
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.error("Failed to fetch archive years:", error);
+  }
 
   // write a function to convert 2024 to 2024-
   return (

@@ -10,9 +10,15 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+
 export default async function page() {
-  const newslettes = await prisma.newsletter.findMany();
+  let newslettes: any[] = [];
+  try {
+    newslettes = await prisma.newsletter.findMany();
+  } catch (error) {
+    console.error("Failed to fetch newsletters:", error);
+  }
 
   return (
     <div>

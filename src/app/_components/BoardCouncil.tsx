@@ -32,14 +32,14 @@ export default function BoardCouncil({
   if (!mounted) return null;
   // Shuffle all members except council members
   const shuffledMembers = members
-    .filter((member) => member.roles[0].memberType !== "COUNCIL")
+    .filter((member) => member.roles?.[0]?.memberType !== "COUNCIL")
     .sort(() => Math.random() - 0.5);
 
   const slicedMembers = shuffledMembers.slice(0, 10);
 
   // Filter only council members
   const councilMembers = members.filter(
-    (member) => member.roles[0].memberType === "COUNCIL"
+    (member) => member.roles?.[0]?.memberType === "COUNCIL"
   );
 
   return (

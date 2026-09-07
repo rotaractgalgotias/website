@@ -10,43 +10,50 @@ import { currentYear } from "@/lib/utils";
 import { allPositions } from "@/utils/positions";
 import { Position } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
-  const members = await prisma.member.findMany({
-    include: {
-      roles: {
-        where: {
-          year: {
-            year: currentYear,
+  let members: any[] = [];
+  try {
+    members = await prisma.member.findMany({
+      include: {
+        roles: {
+          where: {
+            year: {
+              year: currentYear,
+            },
           },
         },
       },
-    },
-    where: {
-      roles: {
-        every: {
-          year: {
-            year: currentYear,
-          },
+      where: {
+        roles: {
+          every: {
+            year: {
+              year: currentYear,
+            },
+          }
         }
       }
-    }
-  });
+    });
+  } catch (error) {
+    console.error("Failed to fetch home page members:", error);
+  }
 
   // Sort members by their position and type
   const sortedMembers = members.sort((a, b) => {
     const order = ["COUNCIL", "DIRECTOR", "COORDINATOR", "MEMBER"];
     const typeComparison =
-      order.indexOf(a.roles[0].memberType) -
-      order.indexOf(b.roles[0].memberType);
+      order.indexOf(a.roles?.[0]?.memberType ?? "") -
+      order.indexOf(b.roles?.[0]?.memberType ?? "");
     if (typeComparison !== 0) return typeComparison;
 
     if (
-      a.roles[0].memberType === "COUNCIL" &&
-      b.roles[0].memberType === "COUNCIL"
+      a.roles?.[0]?.memberType === "COUNCIL" &&
+      b.roles?.[0]?.memberType === "COUNCIL"
     ) {
       return (
-        allPositions.indexOf(a.roles[0]?.position as Position) -
-        allPositions.indexOf(b.roles[0]?.position as Position)
+        allPositions.indexOf(a.roles?.[0]?.position as Position) -
+        allPositions.indexOf(b.roles?.[0]?.position as Position)
       );
     }
 

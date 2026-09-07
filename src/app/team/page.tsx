@@ -16,72 +16,80 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function TeamPage() {
-  const councilPromise = prisma.member.findMany({
-    where: {
-      roles: {
-        some: {
-          memberType: "COUNCIL",
-          year: {
-            year: currentYear,
+  let council: any[] = [];
+  let director: any[] = [];
+  try {
+    const councilPromise = prisma.member.findMany({
+      where: {
+        roles: {
+          some: {
+            memberType: "COUNCIL",
+            year: {
+              year: currentYear,
+            },
+          },
+        },
+        verified: true,
+      },
+      include: {
+        roles: {
+          where: {
+            year: {
+              year: currentYear,
+            },
           },
         },
       },
-      verified: true,
-    },
-    include: {
-      roles: {
-        where: {
-          year: {
-            year: currentYear,
-          },
-        },
-      },
-    },
-  });
+    });
 
-  const directorPromise = prisma.member.findMany({
-    where: {
-      roles: {
-        every: {
-          year: {
-            year: currentYear,
-          },
-          memberType: "DIRECTOR",
-        },
-      },
-      verified: true,
-    },
-    include: {
-      roles: {
-        where: {
-          year: {
-            year: currentYear,
+    const directorPromise = prisma.member.findMany({
+      where: {
+        roles: {
+          every: {
+            year: {
+              year: currentYear,
+            },
+            memberType: "DIRECTOR",
           },
         },
+        verified: true,
       },
-    },
-  });
+      include: {
+        roles: {
+          where: {
+            year: {
+              year: currentYear,
+            },
+          },
+        },
+      },
+    });
 
-  const [council, director] = await Promise.all([
-    councilPromise,
-    directorPromise,
-  ]);
+    [council, director] = await Promise.all([
+      councilPromise,
+      directorPromise,
+    ]);
+  } catch (error) {
+    console.error("Failed to fetch team data:", error);
+  }
 
   const sortedCouncil = council.sort((a, b) => {
     const order = ["COUNCIL", "DIRECTOR", "COORDINATOR", "MEMBER"];
     const typeComparison =
-      order.indexOf(a.roles[0].memberType ?? "") -
-      order.indexOf(b.roles[0].memberType ?? "");
+      order.indexOf(a.roles?.[0]?.memberType ?? "") -
+      order.indexOf(b.roles?.[0]?.memberType ?? "");
     if (typeComparison !== 0) return typeComparison;
 
     if (
-      (a.roles[0].memberType ?? "") === "COUNCIL" &&
-      (b.roles[0].memberType ?? "") === "COUNCIL"
+      (a.roles?.[0]?.memberType ?? "") === "COUNCIL" &&
+      (b.roles?.[0]?.memberType ?? "") === "COUNCIL"
     ) {
       return (
-        allPositions.indexOf(a.roles[0].position as Position) -
-        allPositions.indexOf(b.roles[0].position as Position)
+        allPositions.indexOf(a.roles?.[0]?.position as Position) -
+        allPositions.indexOf(b.roles?.[0]?.position as Position)
       );
     }
 
@@ -127,7 +135,7 @@ export default async function TeamPage() {
                           <AvatarFallback>
                             {member.name
                               .split(" ")
-                              .map((n) => n[0])
+                              .map((n: string) => n[0])
                               .join("")}
                           </AvatarFallback>
                         </Avatar>
@@ -170,13 +178,13 @@ export default async function TeamPage() {
                   <AvatarFallback>
                     {member.name
                       .split(" ")
-                      .map((n) => n[0])
+                      .map((n: string) => n[0])
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <h3 className="font-medium text-sm">Rtr. {member.name}</h3>
                 <p className="text-xs text-muted-foreground">
-                  {member.roles[0].position.replaceAll("_", " ")}
+                  {member.roles?.[0]?.position?.replaceAll("_", " ") ?? ""}
                 </p>
               </div>
             ))}
@@ -194,13 +202,13 @@ export default async function TeamPage() {
                   <AvatarFallback>
                     {member.name
                       .split(" ")
-                      .map((n) => n[0])
+                      .map((n: string) => n[0])
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <h3 className="font-medium text-sm">Rtr. {member.name}</h3>
                 <p className="text-xs text-muted-foreground">
-                  {member.roles[0].position.replaceAll("_", " ")}
+                  {member.roles?.[0]?.position?.replaceAll("_", " ") ?? ""}
                 </p>
               </div>
             ))}

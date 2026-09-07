@@ -3,16 +3,21 @@ import { currentYear } from "@/lib/utils";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const events = await prisma.event.findMany({
-    select: {
-      slug: true,
-    },
-    where: {
-      year: {
-        year: currentYear,
+  let events: any[] = [];
+  try {
+    events = await prisma.event.findMany({
+      select: {
+        slug: true,
       },
-    },
-  });
+      where: {
+        year: {
+          year: currentYear,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Failed to fetch events for sitemap:", error);
+  }
   return [
     {
       url: "https://rotaractgalgotias.org/",

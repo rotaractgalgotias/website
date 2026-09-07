@@ -13,17 +13,24 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function EventsPage() {
-  const events = await prisma.event.findMany({
-    where: {
-      year: {
-        year: currentYear,
+  let events: any[] = [];
+  try {
+    events = await prisma.event.findMany({
+      where: {
+        year: {
+          year: currentYear,
+        },
       },
-    },
-    orderBy: {
-      date: "desc",
-    },
-  });
+      orderBy: {
+        date: "desc",
+      },
+    });
+  } catch (error) {
+    console.error("Failed to fetch events:", error);
+  }
   return (
     <div className="min-h-screen bg-background py-8 space-y-8 lg:space-y-12 lg:py-12">
       <Heading />

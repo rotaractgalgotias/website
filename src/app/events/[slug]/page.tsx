@@ -48,20 +48,25 @@ Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const events = await prisma.event.findMany({
-    where: {
-      year: {
-        year: currentYear,
+  try {
+    const events = await prisma.event.findMany({
+      where: {
+        year: {
+          year: currentYear,
+        },
       },
-    },
-    select: {
-      slug: true,
-    },
-  });
+      select: {
+        slug: true,
+      },
+    });
 
-  return events.map((post) => ({
-    slug: post.slug,
-  }));
+    return events.map((post) => ({
+      slug: post.slug,
+    }));
+  } catch (error) {
+    console.error("Failed to fetch events for static params:", error);
+    return [];
+  }
 }
 
 export default async function page({
