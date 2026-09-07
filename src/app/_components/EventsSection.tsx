@@ -123,7 +123,7 @@ export default function EventsSection() {
             plugins={[
               Autoplay({
                 delay: 2000,
-              }),
+              }) as any,
             ]}
           >
             <CarouselContent>

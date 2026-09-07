@@ -24,8 +24,9 @@
     "@tailwindcss/typography": "^0.5.15",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "embla-carousel": "^8.5.2",
     "embla-carousel-autoplay": "^8.5.2",
-    "embla-carousel-react": "^8.3.1",
+    "embla-carousel-react": "^8.5.2",
     "framer-motion": "^11.11.15",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.456.0",
@@ -56,5 +57,10 @@
     "prisma": "6.9.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "overrides": {
+      "embla-carousel": "8.5.2"
+    }
   }
 }
