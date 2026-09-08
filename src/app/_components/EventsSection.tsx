@@ -137,6 +137,7 @@ export default function EventsSection() {
                       src={image.image}
                       alt={image.image}
                       fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       className="rounded-lg object-cover w-full"
                     />
                   </motion.div>

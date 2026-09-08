@@ -59,6 +59,7 @@ export default function PartnersSection() {
               className="flex items-center justify-center relative w-full h-16"
             >
               <motion.div
+                className="relative w-full h-full"
               // whileHover={{ scale: 1.05 }}
               // whileTap={{ scale: 0.95 }}
               // transition={{ type: "spring", stiffness: 400, damping: 100 }}
@@ -67,6 +68,7 @@ export default function PartnersSection() {
                   src={logo.src}
                   alt={logo.alt}
                   fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   title={logo.title}
                   className="object-contain"
                 />
